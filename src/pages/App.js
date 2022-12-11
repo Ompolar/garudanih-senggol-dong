@@ -23,7 +23,11 @@ function App() {
       {currentUserData ? (
         currentUserData.role === "member" ?
         <HomeUser /> : <HomeAdmin />
-      ) : <LoadingSpinner />}
+      ) : (
+        <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center">
+          <LoadingSpinner />
+        </div>
+      )}
     </div >
   );
 }

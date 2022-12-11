@@ -9,6 +9,7 @@
 .login-page {
     height: 100vh;
     overflow-x: hidden;
+    background: white;
 }
 
 .login-title p {

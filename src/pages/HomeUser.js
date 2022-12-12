@@ -1,9 +1,9 @@
-import Navigation from '../components/Nav/Navigation'
+import NavBar from '../components/Nav/NavBar'
 
 export default function HomeUser() {
     return (
         <div>
-            <Navigation />
+            <NavBar />
             <h1 style={{ marginTop: "100px", background: "tomato", textAlign: "center" }}>Member Dashboard</h1>
         </div>
     )

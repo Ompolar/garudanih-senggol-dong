@@ -1,3 +1,4 @@
+import "./login.css"
 import { Container, Alert } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,7 @@ export default function LoginInput() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { userLoginResult, userLoginError, userLoginLoading } = useSelector((state) => state.UserReducer)
+    const { userLoginResult, userLoginError } = useSelector((state) => state.UserReducer)
 
     async function handleSubmit(e) {
         setAlert(true)
@@ -43,7 +44,7 @@ export default function LoginInput() {
 
         if (isTokenExist) navigate("/")
 
-    }, [userLoginResult, userLoginError, userLoginLoading, isLoading, navigate])
+    }, [userLoginResult, userLoginError, isLoading, navigate])
 
     const responseSuccessGoogle = (response) => {
         setIsLoading(true)

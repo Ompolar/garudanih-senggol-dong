@@ -1,5 +1,4 @@
-import '../../styles/App.css';
-import "./sidebar.css"
+import "./nav.css"
 import logo from '../../assets/logo.svg'
 import LoadingSpinner from '../LoadingSpinner';
 import { Link } from 'react-router-dom'

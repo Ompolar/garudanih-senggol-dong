@@ -1,4 +1,3 @@
-import "../components/Login/login.css";
 import bgLogin from "../assets/bg_login.png"
 import LoginInput from "../components/Login/LoginInput"
 import { Row, Col } from "react-bootstrap"

@@ -1,26 +1,26 @@
-import "./sidebar.css"
+import "./nav.css"
 import { Link } from 'react-router-dom'
 
 export default function SideBar({ show }) {
     const listItem = [
         {
             item: "Dashboard",
-            link: "/",
+            link: "home",
             icon: "bi bi-grid-1x2-fill ps-4",
         },
         {
             item: "Our Users",
-            link: "/",
+            link: "user",
             icon: "bi bi-people-fill ps-4",
         },
         {
             item: "List Ticket",
-            link: "/",
+            link: "ticket",
             icon: "bi bi-ticket-perforated-fill ps-4",
         },
         {
             item: "Transaction",
-            link: "/",
+            link: "transaction",
             icon: "bi bi-receipt-cutoff ps-4",
         },
     ]
@@ -35,7 +35,7 @@ export default function SideBar({ show }) {
                 return (
                     <div className="sidebar-position" key={index}>
                         <i className={menu.icon}></i>
-                        <Link to={menu.link}>{menu.item}</Link>
+                        <Link to={`admin/${menu.link}`}>{menu.item}</Link>
                     </div>
                 )
             })}

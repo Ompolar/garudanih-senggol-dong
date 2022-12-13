@@ -1,9 +1,7 @@
-import NavBar from '../components/Nav/NavBar'
-import SideBar from '../components/Nav/SideBar'
-import Dashboard from "../components/Home/Admin/Dashboard"
-import User from "../components/Home/Admin/User"
+import NavBar from '../../Nav/NavBar'
+import SideBar from '../../Nav/SideBar'
 import { useState } from "react"
-import { Routes, Route, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 
 export default function HomeAdmin() {
     const [isOpen, setIsOpen] = useState(false)

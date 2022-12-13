@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { actionCurrentUser } from '../actions/UserAction';
-import HomeAdmin from './HomeAdmin';
-import HomeUser from './HomeUser';
+import HomeAdmin from '../components/Home/Admin/Home';
+import HomeUser from '../components/Home/User/Home';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-export default function Home() {
+export default function LandingPage() {
     const dispatch = useDispatch()
 
     const token = localStorage.getItem("token")

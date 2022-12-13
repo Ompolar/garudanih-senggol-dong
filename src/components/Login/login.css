@@ -52,7 +52,7 @@
     margin-left: 9px;
 }
 
-.btn.btn-primary {
+.btn.btn--primary {
     border: 1px solid #2F82FF;
     color: #ffffff;
     box-shadow: 1px 10px 30px -10px #2F82FF;
@@ -67,7 +67,7 @@
     z-index: 1;
 }
 
-.btn.btn-primary:after {
+.btn.btn--primary:after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -78,7 +78,7 @@
     z-index: -2;
 }
 
-.btn.btn-primary:before {
+.btn.btn--primary:before {
     content: '';
     position: absolute;
     bottom: 0;
@@ -90,11 +90,11 @@
     z-index: -1;
 }
 
-.btn.btn-primary:hover {
+.btn.btn--primary:hover {
     color: #2F82FF;
 }
 
-.btn.btn-primary:hover:before {
+.btn.btn--primary:hover:before {
     width: 100%;
 }
 

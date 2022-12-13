@@ -163,7 +163,7 @@ export default function RegisterInput() {
                     style={{ width: "70%" }}
                 />
                 {error.confirmPassword && <span style={{ color: "red", textAlign: "left !importan" }}>{error.confirmPassword}</span>}
-                <button type="submit" value={isLoading ? "Loading" : "Register"} className="btn btn-primary">{isLoading ? <LoadingSpinner /> : "Register"}</button>
+                <button type="submit" value={isLoading ? "Loading" : "Register"} className="btn btn--primary">{isLoading ? <LoadingSpinner /> : "Register"}</button>
             </form>
             <p className="mt-3">Already have an account?<Link to={"/login"} className="ms-2">Login here</Link></p>
         </Container>

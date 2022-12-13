@@ -84,7 +84,7 @@ export default function LoginInput() {
                     style={{ width: "70%" }}
                 />
                 <Link to={"/forgot-password"}>Forgot Password</Link>
-                <button type="submit" value={isLoading ? "Loading" : "Login"} className="btn btn-primary">{isLoading ? <LoadingSpinner /> : "Login"}</button>
+                <button type="submit" value={isLoading ? "Loading" : "Login"} className="btn btn--primary">{isLoading ? <LoadingSpinner /> : "Login"}</button>
             </form>
             <p>Another options for login</p>
             <GoogleOAuthProvider clientId="785137861913-jraaaegd6mhuunhiuntrpighacick6ea.apps.googleusercontent.com">

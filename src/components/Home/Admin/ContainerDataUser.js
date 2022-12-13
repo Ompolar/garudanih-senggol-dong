@@ -1,7 +1,7 @@
 import FetchingDataUser from "./FetchingDataUser";
 import { Link } from "react-router-dom";
 
-export default function TableDataUser() {
+export default function ContainerDataUser() {
     return (
         <div className="p-3">
             <div className="d-flex">

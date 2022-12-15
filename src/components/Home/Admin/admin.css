@@ -16,35 +16,7 @@
     border-radius: 8px;
 }
 
-/* table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
-} */
-
-/* tr {
-    transition: all .2s ease-in;
-    cursor: pointer;
-} */
-
-/* th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid white;
-    text-align: left;
-    background: white;
+/* ============= STYLING CREATE LAYOUT ============= */
+.form-user-create input {
+    height: 40px;
 }
-
-.header {
-    background-color: white;
-    color: #2F82FF;
-} */
-
-/* .show tr:hover {
-    background-color: #F3F7FD;
-    transform: scale(1.02);
-    border: 5px solid #2F82FF;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
-} */

@@ -100,7 +100,7 @@ export const actionUserLoginWithGoogle = (token) => {
 
         axios({
             method: 'POST',
-            url: 'http://localhost:8010/v2/user/login-google',
+            url: 'https://api-ticket.up.railway.app/v2/user/login-google',
             timeout: 120000,
             data: token
         })

@@ -5,6 +5,17 @@
 }
 
 /* ============= STYLING TABLE ============= */
+.btn-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #2F82FF;
+    color: white;
+    text-decoration: none;
+    padding: 7px 20px;
+    border-radius: 8px;
+}
+
 /* table {
     width: 100%;
     border-collapse: collapse;

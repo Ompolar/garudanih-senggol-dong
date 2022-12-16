@@ -1,14 +1,17 @@
 import axios from 'axios';
 import imgHolder from '../../../assets/logo.svg';
 import { useState, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, Form } from "react-bootstrap";
+import LoadingSpinner from '../../LoadingSpinner';
 
 export default function CreateDataUser() {
     const [imageFile, setImageFile] = useState(imgHolder)
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const fileRef = useRef()
+    const navigate = useNavigate()
 
     const [body, setBody] = useState({
         name: "",
@@ -40,6 +43,7 @@ export default function CreateDataUser() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault()
+        setLoading(true)
 
         console.log(body);
 
@@ -64,7 +68,8 @@ export default function CreateDataUser() {
             }
         })
             .then((res) => {
-                console.log(res.data)
+                navigate("/admin/user")
+                setLoading(false)
             })
             .catch((err) => {
                 console.log(err.message)
@@ -139,7 +144,11 @@ export default function CreateDataUser() {
             </div>
             <div className="d-flex justify-content-end">
                 <Link to="../admin/user" className="btn btn-danger mx-3"><i className="bi bi-x-lg me-2"></i>Cancel</Link>
-                <button className="btn btn-primary" onClick={(e) => onSubmitHandler(e)}><i className="bi bi-save2-fill me-2"></i>Save Changes</button>
+                <button className="btn btn-primary" onClick={(e) => onSubmitHandler(e)}>{loading ? <LoadingSpinner /> : (
+                    <>
+                        <i className="bi bi-person-plus-fill me-2"></i>Create New user
+                    </>
+                )}</button>
             </div>
         </div>
     );

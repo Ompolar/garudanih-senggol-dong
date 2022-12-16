@@ -3,9 +3,11 @@ import moment from "moment";
 import { useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import CardSkeleton from "../../Loader/CardSkeleton";
+import DetailTicket from "../../Modal/DetailTicket";
 
 export default function FetchingDataTicket() {
     const [tickets, setTickets] = useState([]);
+    const [modalShow, setModalShow] = useState(false)
 
     axios({
         method: 'GET',
@@ -45,7 +47,7 @@ export default function FetchingDataTicket() {
                                     </Row>
                                     <p>{moment(ticket.takeOff).format('ll')}</p>
                                 </Card.Body>
-                                <Card.Footer style={{ background: "#2F82FF", border: "none" }}>
+                                <Card.Footer style={{ background: "#2F82FF", border: "none", cursor: "pointer" }} onClick={() => setModalShow(true)}>
                                     <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
                                 </Card.Footer>
                             </Card>
@@ -53,6 +55,10 @@ export default function FetchingDataTicket() {
                     )
                 })
             ) : <CardSkeleton md="4" /> }
+            <DetailTicket
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
         </Row>
     );
 }

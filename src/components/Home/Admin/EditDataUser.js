@@ -4,9 +4,13 @@ import imgHolder from '../../../assets/logo.svg';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState, useRef } from 'react';
+import DeleteModal from '../../Modal/DeleteModal';
+import LoadingSpinner from '../../LoadingSpinner'
 
 export default function EditDataUser() {
     const [imageFile, setImageFile] = useState(imgHolder)
+    const [modalShow, setModalShow] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const fileRef = useRef()
     const navigate = useNavigate()
@@ -42,7 +46,7 @@ export default function EditDataUser() {
                     phone: res.data.data.phone,
                 })
 
-                if(res.data.data.image) setImageFile(res.data.data.image)
+                if (res.data.data.image) setImageFile(res.data.data.image)
             })
             .catch((err) => {
                 console.log(err)
@@ -67,11 +71,12 @@ export default function EditDataUser() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault()
+        setLoading(true)
 
         const formData = new FormData();
 
-        if(body.image) formData.append("image", body.image);
-        
+        if (body.image) formData.append("image", body.image);
+
         formData.append("name", body.name);
         formData.append("email", body.email);
         formData.append("city", body.city);
@@ -88,24 +93,8 @@ export default function EditDataUser() {
             }
         })
             .then((res) => {
-                console.log(res.data)
-            })
-            .catch((err) => {
-                console.log(err.message)
-            })
-    }
-
-    const onDeletedHandler = (e) => {
-        axios({
-            method: 'DELETE',
-            url: `https://api-ticket.up.railway.app/v1/admin/delete/${id}`,
-            timeout: 120000,
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then(() => {
-                navigate("/")
+                navigate("/admin/user")
+                setLoading(false)
             })
             .catch((err) => {
                 console.log(err.message)
@@ -163,10 +152,21 @@ export default function EditDataUser() {
                 </Row>
             </div>
             <div className="d-flex">
-                <button className="btn btn-danger me-auto" onClick={(e) => onDeletedHandler(e)}><i className="bi bi-trash-fill me-2"></i>Delete Account</button>
+                <button className="btn btn-danger me-auto" onClick={() => setModalShow(true)}><i className="bi bi-trash-fill me-2"></i>Delete Account</button>
                 <Link to="../admin/user" className="btn btn-danger mx-3"><i className="bi bi-x-lg me-2"></i>Cancel</Link>
-                <button className="btn btn-primary" onClick={(e) => onSubmitHandler(e)}><i className="bi bi-save2-fill me-2"></i>Save Changes</button>
+                <button className="btn btn-primary" onClick={(e) => onSubmitHandler(e)}>{loading ? <LoadingSpinner /> : (
+                    <>
+                        <i className="bi bi-save2-fill me-2"></i>Save Changes
+                    </>
+                )}</button>
             </div>
+            <DeleteModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                userid={id}
+                username={body.name}
+                accesstoken={token}
+            />
         </div>
     );
 }

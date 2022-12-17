@@ -1,5 +1,4 @@
 import './modal.css';
-import axios from "axios"
 import { Modal, Button } from "react-bootstrap"
 
 export default function DetailTicket(props) {
@@ -15,7 +14,7 @@ export default function DetailTicket(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Are you sure want to delete <span className="text-danger fw-bold">TESTING</span> account permanently ?</p>
+                <p>Are you sure want to delete <span className="text-danger fw-bold">{props.detail.code}</span> account permanently ?</p>
             </Modal.Body>
             <Modal.Footer className="d-flex flex-nowrap border-0">
                 <Button onClick={props.onHide} className="w-100" style={{ borderRadius: "0 10px 0 10px" }}>Cancel</Button>

@@ -18,10 +18,10 @@ export default function ContainerDataTicket() {
                     justify
                 >
                     <Tab eventKey="domestic" title="Domestic">
-                        <FetchingDataTicket type="doms" />
+                        <FetchingDataTicket type="doms"/>
                     </Tab>
                     <Tab eventKey="international" title="International">
-                        <FetchingDataTicket type="intr" />
+                        <FetchingDataTicket type="intr"/>
                     </Tab>
                 </Tabs>
             </div>

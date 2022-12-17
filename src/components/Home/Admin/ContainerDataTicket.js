@@ -1,4 +1,6 @@
+import './admin.css';
 import { Link } from "react-router-dom";
+import { Tab, Tabs } from "react-bootstrap";
 import FetchingDataTicket from "./FetchingDataTicket";
 
 export default function ContainerDataTicket() {
@@ -9,7 +11,19 @@ export default function ContainerDataTicket() {
                 <p className="fs-4 fw-bold ms-2 my-auto">List Ticket</p>
             </div>
             <div className="my-3">
-                <FetchingDataTicket />
+                <Tabs
+                    defaultActiveKey="domestic"
+                    id="justify-tab-example"
+                    className="mb-3"
+                    justify
+                >
+                    <Tab eventKey="domestic" title="Domestic">
+                        <FetchingDataTicket type="doms" />
+                    </Tab>
+                    <Tab eventKey="international" title="International">
+                        <FetchingDataTicket type="intr" />
+                    </Tab>
+                </Tabs>
             </div>
             <Link to={"admin/user/create"} className="btn btn-primary">Create New Ticket</Link>
         </div>

@@ -96,7 +96,7 @@ export default function FetchingDataTicket(props) {
                                         </Row>
                                         <p>{moment(ticket.takeOff).format('ll')}</p>
                                     </Card.Body>
-                                    <div className="flap" datacode={ticket.code} dataindex={index}></div>
+                                    <div className="flap" datacode={ticket.code} dataindex={index+1}></div>
                                     <Card.Footer onClick={() => onHandleDetail(ticket.id)}>
                                         <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
                                     </Card.Footer>

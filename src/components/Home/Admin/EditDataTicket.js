@@ -3,13 +3,19 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Row, Col, Form } from "react-bootstrap";
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import FlightLandIcon from '@mui/icons-material/FlightLand';
-import FlightClassIcon from '@mui/icons-material/FlightClass';
-import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import LoadingSpinner from '../../LoadingSpinner';
-import DeleteTicketModal from '../../Modal/DeleteTicketModal';
-import { CalendarMonth, FamilyRestroom, Public } from '@mui/icons-material';
+import DeleteModal from '../../Modal/DeleteModal';
+import { 
+    CalendarMonth, 
+    FamilyRestroom, 
+    Public, 
+    Save,
+    AirplaneTicket,
+    FlightClass,
+    FlightLand,
+    FlightTakeoff,
+    AirlineSeatReclineNormal
+} from '@mui/icons-material';
 
 export default function EditDataTicket() {
     const [loading, setLoading] = useState(false)
@@ -27,7 +33,7 @@ export default function EditDataTicket() {
         totalChair: 0,
         flight: ""
     })
-
+    
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -70,31 +76,31 @@ export default function EditDataTicket() {
     const onSubmitHandler = (e) => {
         e.preventDefault()
         setLoading(true)
-
-        // axios({
-        //     method: 'POST',
-        //     url: `https://api-ticket.up.railway.app/v1/ticket`,
-        //     timeout: 120000,
-        //     data: reqBody
-        // }).then(() => {
-        //     navigate("/admin/ticket")
-        //     setLoading(false)
-        // }).catch((err) => {
-        //     console.log(err.message)
-        // })
+        
+        axios({
+            method: 'PUT',
+            url: `https://api-ticket.up.railway.app/v1/ticket/${id}`,
+            timeout: 120000,
+            data: reqBody
+        }).then(() => {
+            navigate("/admin/ticket")
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err.message)
+        })
     }
 
     return (
         <div className="p-3">
             <div className="d-flex">
-                <AirplaneTicketIcon fontSize="large" className="text-white p-1 rounded" style={{ background: "#2F82FF" }} />
+                <AirplaneTicket fontSize="large" className="text-white p-1 rounded" style={{ background: "#2F82FF" }} />
                 <p className="fs-4 fw-bold ms-2 my-auto">Ticket<span className="text-muted fs-4 ms-2 fw-normal">/ Edit</span></p>
             </div>
             <div className="my-3 bg-white p-4 rounded form-user-create">
                 <Row>
                     <Col md="5">
                         <div className="d-flex mb-2">
-                            <FlightTakeoffIcon />
+                            <FlightTakeoff />
                             <label className="ms-2">Departure</label>
                         </div>
                         <Form.Control type="text" name="departure" className="mb-4" value={reqBody.departure} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
@@ -107,7 +113,7 @@ export default function EditDataTicket() {
                     </Col>
                     <Col md="5">
                         <div className="d-flex mb-2">
-                            <FlightLandIcon />
+                            <FlightLand />
                             <label className="ms-2">Destination</label>
                         </div>
                         <Form.Control type="text" name="destination" className="mb-4" value={reqBody.destination} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
@@ -144,7 +150,7 @@ export default function EditDataTicket() {
                     </Col>
                     <Col md="3">
                         <div className="d-flex mb-2">
-                            <FlightClassIcon />
+                            <FlightClass />
                             <label className="ms-2">Class</label>
                         </div>
                         <select name="class" defaultValue={reqBody.class} onChange={(e) => onChangeHandler(e)} style={{ width: "100%", height: "40px" }} className="mb-4" required>
@@ -165,8 +171,8 @@ export default function EditDataTicket() {
                     </Col>
                     <Col md="3">
                         <div className="d-flex mb-2">
-                            <i className="bi bi-cash-stack me-2"></i>
-                            <label>Total Seat Available</label>
+                            <AirlineSeatReclineNormal />
+                            <label className="ms-2">Total Seat Available</label>
                         </div>
                         <Form.Control type="text" name="totalChair" className="mb-4" value={reqBody.totalChair} autoComplete="off" placeholder="Total seat . . ." required
                             onChange={(e) => onChangeHandler(e)}
@@ -190,14 +196,15 @@ export default function EditDataTicket() {
                 <Link to="/admin/ticket" className="btn btn-danger mx-3"><i className="bi bi-x-lg me-2"></i>Cancel</Link>
                 <button className="btn btn-primary" onClick={(e) => onSubmitHandler(e)}>{loading ? <LoadingSpinner /> : (
                     <>
-                        <i className="bi bi-person-plus-fill me-2"></i>Create New Ticket
+                        <Save className="me-2" />Save Changes
                     </>
                 )}</button>
             </div>
-            <DeleteTicketModal
+            <DeleteModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                ticketid={id}
+                dataid={id}
+                target="ticket"
             />
         </div>
     );

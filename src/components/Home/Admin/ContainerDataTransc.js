@@ -1,3 +1,5 @@
+import FetchingDataTransc from "./FetchingDataTransc";
+
 export default function ContainerDataTicket() {
     return (
         <div className="p-3">
@@ -6,7 +8,7 @@ export default function ContainerDataTicket() {
                 <p className="fs-4 fw-bold ms-2 my-auto">Transaction All The Time</p>
             </div>
             <div className="my-3">
-                {/* <FetchingDataUser /> */}
+                <FetchingDataTransc />
             </div>
         </div>
     );

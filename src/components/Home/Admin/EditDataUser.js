@@ -4,7 +4,7 @@ import imgHolder from '../../../assets/logo.svg';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { useEffect, useState, useRef } from 'react';
-import DeleteModal from '../../Modal/DeleteModal';
+import DeleteUserModal from '../../Modal/DeleteUserModal';
 import LoadingSpinner from '../../LoadingSpinner'
 
 export default function EditDataUser() {
@@ -160,7 +160,7 @@ export default function EditDataUser() {
                     </>
                 )}</button>
             </div>
-            <DeleteModal
+            <DeleteUserModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 userid={id}

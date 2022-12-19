@@ -10,24 +10,17 @@ export default function DeleteModal(props) {
 
     const onDeletedHandler = () => {
         setLoading(true)
-
-        setInterval(() => {
-            axios({
-                method: 'DELETE',
-                url: `https://api-ticket.up.railway.app/v1/admin/delete/${props.userid}`,
-                timeout: 120000,
-                headers: {
-                    "Authorization": `Bearer ${props.accesstoken}`
-                }
-            })
-                .then(() => {
-                    navigate("/")
-                    setLoading(false)
-                })
-                .catch((err) => {
-                    console.log(err.message)
-                })
-        }, 3000)
+        
+        axios({
+            method: 'DELETE',
+            url: `https://api-ticket.up.railway.app/v1/${props.target}/${props.dataid}`,
+            timeout: 120000
+        }).then(() => {
+            navigate("/")
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err.message)
+        })
     }
 
     return (
@@ -44,13 +37,13 @@ export default function DeleteModal(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="load-wrapper d-flex justify-content-center">
-                            <div className="follow-the-leader">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
+                        <div className="follow-the-leader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </Modal.Body>
                     <Modal.Footer className="d-flex justify-content-center border-0">
                         <p>This process takes several time</p>
@@ -64,7 +57,7 @@ export default function DeleteModal(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Are you sure want to delete <span className="text-danger fw-bold">{props.username}</span> account permanently ?</p>
+                        <p>Are you sure want to delete data with Id : <span className="text-danger fw-bold">{props.dataid}</span>, permanently ?</p>
                     </Modal.Body>
                     <Modal.Footer className="d-flex flex-nowrap border-0">
                         <Button onClick={props.onHide} className="w-100" style={{ borderRadius: "0 10px 0 10px" }}>Cancel</Button>

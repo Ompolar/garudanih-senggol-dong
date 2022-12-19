@@ -8,7 +8,9 @@ import ContainerDataUser from './components/Home/Admin/ContainerDataUser';
 import ContainerDataTicket from './components/Home/Admin/ContainerDataTicket';
 import ContainerDataTransc from './components/Home/Admin/ContainerDataTransc';
 import EditDataUser from './components/Home/Admin/EditDataUser';
+import EditDataTicket from './components/Home/Admin/EditDataTicket';
 import CreateDataUser from './components/Home/Admin/CreateDataUser';
+import CreateDataTicket from './components/Home/Admin/CreateDataTicket';
 import DashboardContent from './components/Home/Admin/DashboardContent';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
@@ -26,6 +28,8 @@ function App() {
           <Route path="admin/user/:id" element={<EditDataUser />} />
           <Route path="admin/user/create" element={<CreateDataUser />} />
           <Route path="admin/ticket" element={<ContainerDataTicket />} />
+          <Route path="admin/ticket/:id" element={<EditDataTicket />} />
+          <Route path="admin/ticket/create" element={<CreateDataTicket />} />
           <Route path="admin/transaction" element={<ContainerDataTransc />} />
         </Route>
         <Route path="/login" element={<Login />} />

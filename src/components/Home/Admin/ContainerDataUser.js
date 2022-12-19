@@ -11,7 +11,7 @@ export default function ContainerDataUser() {
             <div className="my-3">
                 <FetchingDataUser />
             </div>
-            <Link to="create" className="btn btn-primary">Create New User</Link>
+            <Link to={"create"} className="btn btn-primary">Create New User</Link>
         </div>
     );
 }

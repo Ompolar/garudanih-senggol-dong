@@ -45,8 +45,6 @@ export default function CreateDataUser() {
         e.preventDefault()
         setLoading(true)
 
-        console.log(body);
-
         const formData = new FormData();
 
         if (body.image) formData.append("image", body.image);

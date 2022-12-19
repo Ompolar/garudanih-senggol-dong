@@ -1,6 +1,7 @@
 import './modal.css';
 import moment from "moment";
 import { Modal, Button, Row, Col } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 export default function DetailTicket(props) {
     return (
@@ -57,7 +58,7 @@ export default function DetailTicket(props) {
             </Modal.Body>
             <Modal.Footer className="border-0">
                 <Button variant="secondary" onClick={props.onHide}>Close</Button>
-                <Button onClick={props.onHide}>Edit</Button>
+                <Link to={`/admin/ticket/${props.detail.id}`} className="btn btn-primary text-decoration-none">Edit</Link>
             </Modal.Footer>
         </Modal>
     );

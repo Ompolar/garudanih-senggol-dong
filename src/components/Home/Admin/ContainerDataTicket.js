@@ -25,7 +25,7 @@ export default function ContainerDataTicket() {
                     </Tab>
                 </Tabs>
             </div>
-            <Link to={"admin/user/create"} className="btn btn-primary">Create New Ticket</Link>
+            <Link to={"create"} className="btn btn-primary">Create New Ticket</Link>
         </div>
     );
 }

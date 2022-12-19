@@ -14,7 +14,7 @@ export default function DeleteModal(props) {
         setInterval(() => {
             axios({
                 method: 'DELETE',
-                url: `https://api-ticket.up.railway.app/v1/admin/delete/${props.userid}`,
+                url: `https://api-ticket.up.railway.app/v1/ticket/${props.ticketid}`,
                 timeout: 120000
             })
                 .then(() => {

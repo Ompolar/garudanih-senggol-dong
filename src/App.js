@@ -12,7 +12,12 @@ import EditDataTicket from './components/Home/Admin/EditDataTicket';
 import CreateDataUser from './components/Home/Admin/CreateDataUser';
 import CreateDataTicket from './components/Home/Admin/CreateDataTicket';
 import DashboardContent from './components/Home/Admin/DashboardContent';
+
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+
+import FetchingTicket from './components/Home/User/FetchingTicket';
+import DetailTicket from './components/Home/User/DetailTicket';
+import FormTransaction from './components/Home/User/FormTransaction';
 
 function App() {
   return (
@@ -31,6 +36,10 @@ function App() {
           <Route path="admin/ticket/:id" element={<EditDataTicket />} />
           <Route path="admin/ticket/create" element={<CreateDataTicket />} />
           <Route path="admin/transaction" element={<ContainerDataTransc />} />
+          {/* routes user */}
+          <Route index element={<FetchingTicket />} />
+          <Route path="ticket/:id" element={<DetailTicket />} />
+          <Route path="transaction/:ticketId" element={<FormTransaction />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

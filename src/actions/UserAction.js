@@ -59,7 +59,7 @@ export const actionUserLogin = (body) => {
 
         axios({
             method: 'POST',
-            url: 'https://api-ticket.up.railway.app/v2/user/login',
+            url: 'http://localhost:8010/v2/user/login',
             timeout: 120000,
             data: body
         })
@@ -156,7 +156,7 @@ export const actionCurrentUser = (token) => {
 
         axios({
             method: 'GET',
-            url: 'https://api-ticket.up.railway.app/v1/user/current',
+            url: 'http://localhost:8010/v1/user/current',
             timeout: 120000,
             headers: {
                 "Authorization": `Bearer ${token}`

@@ -37,11 +37,11 @@ function Navigation() {
                 {currentUserData ? (
                     <div style={{ display: "flex", cursor: "pointer" }}>
                         <Image
-                            width="50"
-                            src={currentUserData.image ? currentUserData.image : logo}
+                            src={currentUserData.image || logo}
                             alt="user img"
                             roundedCircle
                             thumbnail
+                            style={{ width: "50px", height: "50px", objectFit: "cover" }}
                         />
                         <p className="my-auto ms-2 d-none d-md-block">{currentUserData.name.charAt(0).toUpperCase() + currentUserData.name.slice(1)}</p>
                     </div>

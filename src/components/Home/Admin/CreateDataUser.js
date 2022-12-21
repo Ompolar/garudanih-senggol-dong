@@ -58,7 +58,7 @@ export default function CreateDataUser() {
 
         axios({
             method: 'POST',
-            url: `https://api-ticket.up.railway.app/v1/admin/register`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/admin/register`,
             timeout: 120000,
             data: formData,
             headers: {

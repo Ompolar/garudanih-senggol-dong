@@ -13,7 +13,7 @@ export default function FetchingDataUser() {
 
         axios({
             method: 'GET',
-            url: 'https://api-ticket.up.railway.app/v1/admin/all',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/admin/all`,
             timeout: 120000,
             headers: {
                 "Authorization": `Bearer ${token}`

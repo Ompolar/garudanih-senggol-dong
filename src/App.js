@@ -11,13 +11,14 @@ import EditDataUser from './components/Home/Admin/EditDataUser';
 import EditDataTicket from './components/Home/Admin/EditDataTicket';
 import CreateDataUser from './components/Home/Admin/CreateDataUser';
 import CreateDataTicket from './components/Home/Admin/CreateDataTicket';
-import DashboardContent from './components/Home/Admin/DashboardContent';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-import FetchingTicket from './components/Home/User/FetchingTicket';
 import DetailTicket from './components/Home/User/DetailTicket';
+import FormFilter from './components/Home/User/FormFilter';
 import FormTransaction from './components/Home/User/FormTransaction';
+import HistoryTransaction from './components/Home/User/HistoryTransaction';
+import ContentIndex from './pages/ContentIndex';
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <LandingPage />
           </Protected>
         }>
-          <Route path="admin/home" element={<DashboardContent />} />
+          <Route index element={<ContentIndex />} />
           <Route path="admin/user" element={<ContainerDataUser />} />
           <Route path="admin/user/:id" element={<EditDataUser />} />
           <Route path="admin/user/create" element={<CreateDataUser />} />
@@ -37,8 +38,9 @@ function App() {
           <Route path="admin/ticket/create" element={<CreateDataTicket />} />
           <Route path="admin/transaction" element={<ContainerDataTransc />} />
           {/* routes user */}
-          <Route index element={<FetchingTicket />} />
+          <Route path="ticket" element={<FormFilter />} />
           <Route path="ticket/:id" element={<DetailTicket />} />
+          <Route path="transaction" element={<HistoryTransaction />} />
           <Route path="transaction/:ticketId" element={<FormTransaction />} />
         </Route>
         <Route path="/login" element={<Login />} />

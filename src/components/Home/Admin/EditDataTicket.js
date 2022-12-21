@@ -41,7 +41,7 @@ export default function EditDataTicket() {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `https://api-ticket.up.railway.app/v1/ticket/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${id}`,
             timeout: 120000
         }).then((res) => {
             const result = res.data.data
@@ -79,7 +79,7 @@ export default function EditDataTicket() {
         
         axios({
             method: 'PUT',
-            url: `https://api-ticket.up.railway.app/v1/ticket/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${id}`,
             timeout: 120000,
             data: reqBody
         }).then(() => {

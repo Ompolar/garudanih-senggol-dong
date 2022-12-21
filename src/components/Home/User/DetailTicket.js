@@ -11,7 +11,7 @@ export default function DetailTicket() {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `http://localhost:8010/v1/ticket/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${id}`,
             timeout: 120000,
         }).then((res) => {
             setData(res.data.data)

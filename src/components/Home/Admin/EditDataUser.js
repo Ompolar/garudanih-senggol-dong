@@ -31,7 +31,7 @@ export default function EditDataUser() {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `https://api-ticket.up.railway.app/v1/admin/detail/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/admin/detail/${id}`,
             timeout: 120000,
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -85,7 +85,7 @@ export default function EditDataUser() {
 
         axios({
             method: 'PUT',
-            url: `https://api-ticket.up.railway.app/v1/admin/update/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/admin/update/${id}`,
             timeout: 120000,
             data: formData,
             headers: {

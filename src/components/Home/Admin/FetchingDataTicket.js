@@ -15,7 +15,7 @@ export default function FetchingDataTicket(props) {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `https://api-ticket.up.railway.app/v1/ticket-${props.type}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket-${props.type}`,
             timeout: 120000,
         }).then((res) => {
             setTickets(res.data.data.tickets)
@@ -29,7 +29,7 @@ export default function FetchingDataTicket(props) {
         setModalShow(true)
         axios({
             method: 'GET',
-            url: `https://api-ticket.up.railway.app/v1/ticket/${id}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${id}`,
             timeout: 120000,
         }).then((res) => {
             setDataTicket(res.data.data)

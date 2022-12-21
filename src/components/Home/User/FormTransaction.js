@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 export default function FormTransaction() {
     const { ticketId } = useParams()
-    // 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
+    // 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
     const [data, setData] = useState(null)
     const [requestBody, setRequestBody] = useState({
         ktp: "",
@@ -18,7 +18,7 @@ export default function FormTransaction() {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: `http://localhost:8010/v1/ticket/${ticketId}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${ticketId}`,
             timeout: 120000,
         }).then((res) => {
             setData(res.data.data)
@@ -41,7 +41,7 @@ export default function FormTransaction() {
 
         axios({
             method: 'POST',
-            url: `http://localhost:8010/v1/trans/${ticketId}`,
+            url: `${process.env.REACT_APP_BASE_URL}/v1/trans/${ticketId}`,
             timeout: 120000,
             data: requestBody,
             headers: {
@@ -89,7 +89,7 @@ export default function FormTransaction() {
                                             <div className="d-flex">
                                                 {ticket.bookingBy.map((user, index) => {
                                                     return (
-                                                        <p key={index} className="bg-primary rounded p-1 text-white">{user.numChair}</p>
+                                                        <p key={index} className="bg-primary rounded p-1 text-white me-2">{user.numChair}</p>
                                                     )
                                                 })}
                                             </div>
@@ -99,7 +99,9 @@ export default function FormTransaction() {
                             )
                         })}
                     </Row>
-                    <Form.Control type="text" name="returnTicketChair" value={requestBody.returnTicketChair} onChange={(e) => onChangeHandler(e)} placeholder="Pilih nomor kursi . . ." onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} maxLength={3} />
+                    {data.returnTicket.length !== 0 ? (
+                        <Form.Control type="text" name="returnTicketChair" value={requestBody.returnTicketChair} onChange={(e) => onChangeHandler(e)} placeholder="Pilih nomor kursi . . ." onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} maxLength={3} />
+                    ) : ""}
                     <button onClick={(e) => onSubmitHandler(e)}>Pesan Sekarang</button>
                 </>
             ) : <p>Loading . . .</p>}

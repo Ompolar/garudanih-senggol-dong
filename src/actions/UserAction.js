@@ -19,7 +19,7 @@ export const actionUserRegister = (body) => {
 
         axios({
             method: 'POST',
-            url: 'https://api-ticket.up.railway.app/v2/user/register',
+            url: `${process.env.REACT_APP_BASE_URL}/v2/user/register`,
             timeout: 120000,
             data: body
         })
@@ -59,7 +59,7 @@ export const actionUserLogin = (body) => {
 
         axios({
             method: 'POST',
-            url: 'http://localhost:8010/v2/user/login',
+            url: `${process.env.REACT_APP_BASE_URL}/v2/user/login`,
             timeout: 120000,
             data: body
         })
@@ -100,7 +100,7 @@ export const actionUserLoginWithGoogle = (token) => {
 
         axios({
             method: 'POST',
-            url: 'https://api-ticket.up.railway.app/v2/user/login-google',
+            url: `${process.env.REACT_APP_BASE_URL}/v2/user/login-google`,
             timeout: 120000,
             data: token
         })
@@ -156,7 +156,7 @@ export const actionCurrentUser = (token) => {
 
         axios({
             method: 'GET',
-            url: 'http://localhost:8010/v1/user/current',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/current`,
             timeout: 120000,
             headers: {
                 "Authorization": `Bearer ${token}`

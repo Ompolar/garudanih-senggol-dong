@@ -80,4 +80,81 @@ body {
     height: auto;
 }
 
-/* ==================== STYLING NAVBAR ==================== */
+/* ==================== STYLING NAVUSER ==================== */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand .brand-icon {
+    color: #2F82FF;
+    font-size: 30px;
+    transform: rotate(50deg);
+    transition: 0.2s ease-out;
+}
+
+.navbar-brand:hover .brand-icon {
+    transform: rotate(90deg);
+}
+
+.navbar-brand p {
+    margin: 5px auto;
+    color: #2F82FF;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.navbar-link {
+    font-size: 17px;
+    background: transparent;
+    text-decoration: none;
+    border: none;
+    padding: .5em 1em;
+    color: #2F82FF;
+    position: relative;
+    transition: .5s ease;
+}
+
+.navbar-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: #2F82FF;
+    transition: .5s ease;
+}
+
+.navbar-link:hover {
+    color: white;
+    transition-delay: .5s;
+}
+
+.navbar-link:hover::before {
+    width: 100%;
+}
+
+.navbar-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    background-color: #2F82FF;
+    transition: .4s ease;
+    z-index: -1;
+}
+
+.navbar-link:hover::after {
+    height: 100%;
+    transition-delay: 0.4s;
+    color: aliceblue;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}

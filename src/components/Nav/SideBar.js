@@ -5,7 +5,7 @@ export default function SideBar({ show }) {
     const listItem = [
         {
             item: "Dashboard",
-            link: "home",
+            link: "../",
             icon: "bi bi-grid-1x2-fill ps-4",
         },
         {

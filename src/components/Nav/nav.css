@@ -81,14 +81,14 @@ body {
     height: auto;
 }
 
-/* ==================== STYLING NAVUSER ==================== */
+/* ==================== STYLING NAVUSER #2F82FF ==================== */
 .navbar-brand {
     display: flex;
     align-items: center;
 }
 
 .navbar-brand .brand-icon {
-    color: #2F82FF;
+    color: black;
     font-size: 30px;
     transform: rotate(50deg);
     transition: 0.2s ease-out;
@@ -100,7 +100,7 @@ body {
 
 .navbar-brand p {
     margin: 5px auto;
-    color: #2F82FF;
+    color: black;
     font-size: 22px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -112,7 +112,7 @@ body {
     text-decoration: none;
     border: none;
     padding: .5em 1em;
-    color: #2F82FF;
+    color: black;
     position: relative;
     transition: .5s ease;
 }
@@ -131,6 +131,7 @@ body {
 .navbar-link:hover {
     color: white;
     transition-delay: .5s;
+    z-index: 5;
 }
 
 .navbar-link:hover::before {

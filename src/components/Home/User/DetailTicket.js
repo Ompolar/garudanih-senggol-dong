@@ -1,12 +1,30 @@
+import './user.css';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
+import moment from "moment";
+import { AirlineSeatReclineExtra, AssignmentInd, Pin } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
+import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import Select from "react-select";
+
 
 export default function DetailTicket() {
     const { id } = useParams()
 
+    const navigate = useNavigate()
+
     const [data, setData] = useState(null)
+    const [numberOptions, setNumberOptions] = useState([])
+    const [returnNumber, setReturnNumber] = useState([])
+    const [requestBody, setRequestBody] = useState({
+        ktp: "",
+        orderBy: "",
+        numChair: 0,
+        returnTicketId: null,
+        returnTicketChair: 0,
+    })
 
     useEffect(() => {
         axios({
@@ -21,23 +39,267 @@ export default function DetailTicket() {
         })
     }, [id])
 
+    useEffect(() => {
+        if (data) {
+            let arr = []
+            for (let i = 0; i < data.ticket.totalChair; i++) {
+                const found = data.ticket.bookingBy.some(el => el.numChair === i);
+
+                if (!found) arr.push({ value: i, label: i });
+            }
+            setNumberOptions(arr)
+        }
+    }, [data])
+
+    useEffect(() => {
+        if (data) {
+            let arr = []
+
+            data.returnTicket.forEach((ticket, i) => {
+                if (ticket.id.toString() === requestBody.returnTicketId) {
+                    for (let i = 0; i < ticket.totalChair; i++) {
+                        const found = ticket.bookingBy.some(el => el.numChair === i);
+
+                        if (!found) arr.push({ value: i, label: i });
+                    }
+                }
+            })
+            setReturnNumber(arr)
+        }
+    }, [data, requestBody])
+
+    const onChangeHandler = (e) => {
+        setRequestBody({ ...requestBody, [e.target.name]: e.target.value })
+    }
+
+    const onSubmitHandler = (e) => {
+        e.preventDefault()
+
+        console.log(requestBody)
+
+        const token = localStorage.getItem("token")
+
+        axios({
+            method: 'POST',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/trans/${id}`,
+            timeout: 120000,
+            data: requestBody,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((res) => {
+            console.log(res.data)
+
+            navigate("/")
+
+        }).catch((err) => {
+            console.log(err.message)
+        })
+    };
+
+    const responsive = {
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3,
+            slidesToSlide: 3
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 464 },
+            items: 2,
+            slidesToSlide: 2
+        },
+        mobile: {
+            breakpoint: { max: 464, min: 0 },
+            items: 1,
+            slidesToSlide: 1
+        }
+    };
+
     return (
-        <div>
+        <Container>
             {data ? (
-                <Card className="m-2">
-                    <Card.Body>
-                        <b>From</b>
-                        <p>{data.ticket.departureCode}</p>
-                        <p>{data.ticket.departure}</p>
-                        <b>To</b>
-                        <p>{data.ticket.destinationCode}</p>
-                        <p>{data.ticket.destination}</p>
-                    </Card.Body>
-                    <Card.Footer>
-                        <Link to={`/transaction/${data.ticket.id}`} >Booking ticket</Link>
-                    </Card.Footer>
-                </Card>
-            ) : "Loading"}
-        </div>
+                <Row>
+                    <Col md="8">
+                        <Card>
+                            <Card.Body>
+                                <div className="d-flex justify-content-between">
+                                    <p className="fw-bold my-auto">{data.ticket.code}</p>
+                                    <p className="my-auto">{moment(data.ticket.takeOff).format('LL')}</p>
+                                </div>
+                                <Row className="my-4">
+                                    <Col md="1" className="text-end"><i className=" bi-geo-alt-fill fs-5"></i></Col>
+                                    <Col md="10" className="d-flex">
+                                        <div className="animate--line">
+                                            <hr style={{ borderColor: "#2F82FF", borderWidth: "7px" }} />
+                                        </div>
+                                        <i className=" bi-airplane-fill fs-5" style={{ rotate: "90deg" }}></i>
+                                    </Col>
+                                    <Col md="1">
+                                        <i className=" bi-geo-alt-fill fs-5"></i>
+                                    </Col>
+                                </Row>
+                                <div className="d-flex justify-content-between">
+                                    <div className="d-flex flex-column me-3">
+                                        <p className="fs-5">{data.ticket.departure}</p>
+                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({data.ticket.departureCode})</p>
+                                        <p>{moment(data.ticket.takeOff).format('LT')}</p>
+                                    </div>
+                                    <div className="d-flex flex-column text-end ms-3">
+                                        <p className="fs-5">{data.ticket.destination}</p>
+                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({data.ticket.destinationCode})</p>
+                                        <p>{moment(data.ticket.arrive).format('LT')}</p>
+                                    </div>
+                                </div>
+                                <hr style={{ borderColor: "#2F82FF", borderWidth: "3px" }} />
+                                <Row>
+                                    <Col md="4" className="text-center">
+                                        <p className="text-muted m-0">Price</p>
+                                        <p className="fw-bold m-0">Rp{data.ticket.price}</p>
+                                    </Col>
+                                    <Col md="4" className="text-center">
+                                        <p className="text-muted m-0">Class</p>
+                                        <p className="fw-bold m-0">{data.ticket.class}</p>
+                                    </Col>
+                                    <Col md="4" className="text-center">
+                                        <p className="text-muted m-0">Type</p>
+                                        <p className="fw-bold m-0">{data.ticket.type}</p>
+                                    </Col>
+                                </Row>
+                                <hr style={{ borderColor: "#2F82FF", borderWidth: "3px" }} />
+                                <div className="d-flex justify-content-between">
+                                    <p className="fw-bold my-auto">Description Available Seat</p>
+                                    <p className="bg-primary py-1 px-3 rounded text-white">{data.ticket.bookingBy.length} / {data.ticket.totalChair}</p>
+                                </div>
+                                <div className="d-flex flex-wrap justify-content-between">
+                                    {[...Array(data.ticket.totalChair)].map((x, i) => {
+                                        return (
+                                            data.ticket.bookingBy.some(el => el.numChair === i) ? (
+                                                <OverlayTrigger
+                                                    key={i}
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip id="tooltip-top">Has been ordered</Tooltip>
+                                                    }
+                                                >
+                                                    <div className="seat--list bg-success text-white cursor-pointer">
+                                                        <p className="my-auto">{i}</p>
+                                                    </div>
+                                                </OverlayTrigger>
+                                            ) : (
+                                                <div key={i} className="seat--list">
+                                                    <p className="my-auto">{i}</p>
+                                                </div>
+                                            )
+                                        )
+                                    })}
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md="4">
+                        <Card>
+                            <Card.Body>
+                                <p className="fs-5 mb-3 fw-bold">Pesan Sekarang</p>
+                                <div className="mb-4">
+                                    <div className="d-flex mb-2">
+                                        <Pin />
+                                        <label className="ms-2">Identify Number</label>
+                                    </div>
+                                    <Form.Control type="text" name="ktp" value={requestBody.ktp} onChange={(e) => onChangeHandler(e)} placeholder="Nomor KTP . . ." />
+                                </div>
+                                <div className="mb-4">
+                                    <div className="d-flex mb-2">
+                                        <AssignmentInd />
+                                        <label className="ms-2">Booking As</label>
+                                    </div>
+                                    <Form.Control type="text" name="orderBy" value={requestBody.orderBy} onChange={(e) => onChangeHandler(e)} placeholder="Masukan nama . . ." />
+                                </div>
+                                <div className="mb-4">
+                                    <div className="d-flex mb-2">
+                                        <AirlineSeatReclineExtra />
+                                        <label className="ms-2">Seat Number</label>
+                                    </div>
+                                    {numberOptions.length !== 0 ? (
+                                        <Select
+                                            options={numberOptions}
+                                            onChange={(e) => setRequestBody({ ...requestBody, numChair: e.value })}
+                                            placeholder="Select an available seat . . ."
+                                        />
+                                    ) : ""}
+                                </div>
+
+                                {returnNumber.length !== 0 ? (
+                                    <div className="mb-4">
+                                        <div className="d-flex mb-2">
+                                            <AirlineSeatReclineExtra />
+                                            <label className="ms-2">Return Seat Number</label>
+                                        </div>
+                                        <Select
+                                            options={returnNumber}
+                                            onChange={(e) => setRequestBody({ ...requestBody, returnTicketChair: e.value })}
+                                            placeholder="Choose number . . ."
+                                        />
+                                    </div>
+                                ) : ""}
+
+                                <button className="btn--shop" onClick={(e) => onSubmitHandler(e)}>Pesan Sekarang</button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+
+                    {data.returnTicket.length !== 0 ? <p className="fs-5 mt-3 fw-bold">Pesan juga tiket pulang</p> : <p className="fs-5 mt-3 fw-bold text-danger">Saat ini tiket pulang tidak tersedia</p>}
+                    <Carousel
+                        swipeable={true}
+                        draggable={false}
+                        responsive={responsive}
+                        ssr={true}
+                        keyBoardControl={true}
+                        customTransition="all 1.5s ease-in-out"
+                        transitionDuration={500}
+                        containerClass="carousel-container"
+                        removeArrowOnDeviceType={["tablet", "mobile"]}
+                        dotListClass="custom-dot-list-style"
+                        showDots={true}
+                    >
+                        {data.returnTicket.map((ticket, index) => {
+                            return (
+                                <div key={index} className="d-flex align-items-stretch me-4">
+                                    <Card className="w-100 mb-4 card-container">
+                                        <Card.Body className="w-100 card-content">
+                                            <input type="radio" value={ticket.id} onChange={(e) => onChangeHandler(e)} name="returnTicketId" />
+                                            <p style={{ color: "#2F82FF" }}>{moment(ticket.takeOff).format('LL')}</p>
+                                            <Row>
+                                                <Col md="5">
+                                                    <p className="text-muted mb-0">From</p>
+                                                    <p className="fw-bold m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
+                                                    <p style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
+                                                    <p>{moment(ticket.takeOff).format('LT')}</p>
+                                                </Col>
+                                                <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
+                                                    <i className="bi bi-airplane fs-5"></i>
+                                                </Col>
+                                                <Col md="5">
+                                                    <p className="text-muted mb-0">To</p>
+                                                    <p className="fw-bold m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
+                                                    <p style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
+                                                    <p>{moment(ticket.arrive).format('LT')}</p>
+                                                </Col>
+                                            </Row>
+                                        </Card.Body>
+                                        <Card.Footer>
+                                            <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+                                        </Card.Footer>
+                                    </Card>
+                                </div>
+                            )
+                        })}
+                    </Carousel>
+
+
+                </Row>
+            ) : "Loading"
+            }
+        </Container >
     );
 }

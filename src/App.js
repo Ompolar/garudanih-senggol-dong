@@ -15,9 +15,9 @@ import CreateDataTicket from './components/Home/Admin/CreateDataTicket';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import DetailTicket from './components/Home/User/DetailTicket';
-import FormFilter from './components/Home/User/FormFilter';
 import HistoryTransaction from './components/Home/User/HistoryTransaction';
 import ContentIndex from './pages/ContentIndex';
+import UserTicketPage from './pages/UserTicketPage';
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
           <Route path="admin/ticket/create" element={<CreateDataTicket />} />
           <Route path="admin/transaction" element={<ContainerDataTransc />} />
           {/* routes user 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 */}
-          <Route path="ticket" element={<FormFilter />} />
+          <Route path="ticket" element={<UserTicketPage />} />
           <Route path="ticket/:id" element={<DetailTicket />} />
           <Route path="transaction" element={<HistoryTransaction />} />
         </Route>

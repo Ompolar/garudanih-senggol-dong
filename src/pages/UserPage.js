@@ -1,8 +1,8 @@
-import { Container, Row, Col } from 'react-bootstrap'
-import { Outlet } from 'react-router-dom'
-import NavUser from '../../Nav/NavUser'
+import { Container, Row, Col } from 'react-bootstrap';
+import { Outlet } from 'react-router-dom';
+import NavUser from '../components/Nav/NavUser';
 
-export default function HomeUser() {
+export default function UserPage() {
     return (
         <div>
             <div className="bg--airplane">
@@ -17,5 +17,5 @@ export default function HomeUser() {
             </div>
             <Outlet />
         </div>
-    )
+    );
 }

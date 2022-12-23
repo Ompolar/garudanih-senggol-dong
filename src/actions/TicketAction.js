@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const FILTERED_TICKET = "FILTERED_TICKET"
 
-export const getFilteredCar = (param) => {
+export const getFilteredTicket = (param) => {
     const { reset } = param
-
+    
     if (reset) {
         return (dispatch) => {
             dispatch({
@@ -34,9 +34,9 @@ export const getFilteredCar = (param) => {
             timeout: 120000
         })
             .then((response) => {
-                const { driver, date, capacity } = param
+                const { departure, destination, takeOff, classFlight, price } = param
                 
-                const filter = response.data.data.filter((car) => car.available === driver && car.capacity >= capacity && (new Date(car.availableAt) <= date))
+                const filter = response.data.data.tickets.filter((ticket) => ticket.departure === departure && ticket.destination === destination && ticket.class === classFlight && ticket.price >= price && (new Date(ticket.takeOff) <= takeOff))
                 
                 dispatch({
                     type: FILTERED_TICKET,

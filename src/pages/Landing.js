@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { actionCurrentUser } from '../actions/UserAction';
 import HomeAdmin from '../components/Home/Admin/Home';
-import HomeUser from '../components/Home/User/Home';
+import UserPage from './UserPage';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function LandingPage() {
@@ -21,7 +21,7 @@ export default function LandingPage() {
     return (
         <div>
             {currentUserData ? (
-                currentUserData.role === "member" ? <HomeUser /> : <HomeAdmin />
+                currentUserData.role === "member" ? <UserPage /> : <HomeAdmin />
             ) : (
                 <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center">
                     <LoadingSpinner />

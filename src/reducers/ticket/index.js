@@ -11,9 +11,9 @@ const tickets = (state = initialState, action) => {
         case FILTERED_TICKET:
             return {
                 ...state,
-                filteredCarsResult: action.payload.data,
-                filteredCarsLoading: action.payload.loading,
-                filteredCarsError: action.payload.errorMessage
+                filteredTicketResult: action.payload.data,
+                filteredTicketLoading: action.payload.loading,
+                filteredTicketError: action.payload.errorMessage
             }
         default:
             return state

@@ -160,3 +160,13 @@ body {
 .dropdown-toggle::after {
     display: none !important;
 }
+
+.btn--notification {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    color: black;
+    border: 1px solid black;
+    background: transparent;
+    border-radius: 100%;
+}

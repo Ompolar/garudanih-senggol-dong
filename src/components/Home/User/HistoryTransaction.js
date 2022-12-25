@@ -67,7 +67,9 @@ export default function HistoryTransaction() {
             field: "Action",
             width: 270,
             renderCell: (cellValues) => {
-                if (!cellValues.row.isPaid) {
+                if (!cellValues.row.notCancelled) {
+                    return <Button name="paidInfo" variant="secondary" onClick={(e) => onPaymentHandle(e, cellValues.row)}>More info</Button>;
+                } if (!cellValues.row.isPaid) {
                     return <div>
                         <Button name="cancelProcess" variant="danger" className="me-3" onClick={(e) => onCancelFlightHandle(e, cellValues.row)}>Cancel flight</Button>
                         <Button name="paidProcess" onClick={(e) => onPaymentHandle(e, cellValues.row)}>Paying ticket</Button>

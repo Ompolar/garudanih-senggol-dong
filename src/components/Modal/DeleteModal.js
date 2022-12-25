@@ -80,9 +80,9 @@ export default function DeleteModal(props) {
                     <Modal.Footer className="d-flex flex-nowrap border-0">
                         <Button onClick={props.onHide} className="w-100" style={{ borderRadius: "0 10px 0 10px" }}>Cancel</Button>
                         {props.datatransc ? (
-                            <Button variant="secondary" onClick={(e) => onCancelTransc(e)} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
+                            <Button variant="secondary" onClick={onCancelTransc} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
                         ) : (
-                            <Button variant="secondary" onClick={(e) => onDeletedHandler(e)} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
+                            <Button variant="secondary" onClick={onDeletedHandler} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
                         )}
                     </Modal.Footer>
                 </>

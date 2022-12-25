@@ -192,7 +192,13 @@
     color: white;
 }
 
-.footer--user a {
+.footer--user div p:nth-child(1) {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 2em;
+}
+
+.footer--user .footer--nav {
     text-decoration: none;
     color: white;
     margin-bottom: 1em;
@@ -200,7 +206,7 @@
     transition: all .5s ease-in;
 }
 
-.footer--user a::before {
+.footer--user .footer--nav::before {
     content: "";
     bottom: 0;
     left: 0;
@@ -211,6 +217,11 @@
     transition: all .5s ease-in;
 }
 
-.footer--user a:hover::before {
+.footer--user .footer--nav:hover::before {
     width: 10%;
+}
+
+.footer--user .footer--social {
+    color: white;
+    margin-right: 1em;
 }

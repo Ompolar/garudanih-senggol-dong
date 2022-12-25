@@ -3,6 +3,7 @@ import axios from "axios"
 import { Modal, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { useState } from 'react';
+import LoadingCircle from '../Loader/LoadingCircle';
 
 export default function DeleteModal(props) {
     const [loading, setLoading] = useState(false)
@@ -23,6 +24,25 @@ export default function DeleteModal(props) {
         })
     }
 
+    const onCancelTransc = () => {
+        axios({
+            method: 'PUT',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/trans/cancel/${props.datatransc.id}`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${props.accesstoken}`
+            }
+        })
+            .then((res) => {
+                console.log(res.data)
+                navigate("/")
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
+    }
+
     return (
         <Modal
             {...props}
@@ -36,14 +56,8 @@ export default function DeleteModal(props) {
                             Please waiting
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body className="load-wrapper d-flex justify-content-center">
-                        <div className="follow-the-leader">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                    <Modal.Body>
+                        <LoadingCircle styled="d-flex justify-content-center" />
                     </Modal.Body>
                     <Modal.Footer className="d-flex justify-content-center border-0">
                         <p>This process takes several time</p>
@@ -57,11 +71,19 @@ export default function DeleteModal(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Are you sure want to delete data with Id : <span className="text-danger fw-bold">{props.dataid}</span>, permanently ?</p>
+                        {props.datatransc ? (
+                            <p>Are you sure want to cancel transaction data with Id : <span className="text-danger fw-bold">{props.datatransc.id}</span>, permanently ?</p>
+                        ) : (
+                            <p>Are you sure want to delete data with Id : <span className="text-danger fw-bold">{props.dataid}</span>, permanently ?</p>
+                        )}
                     </Modal.Body>
                     <Modal.Footer className="d-flex flex-nowrap border-0">
                         <Button onClick={props.onHide} className="w-100" style={{ borderRadius: "0 10px 0 10px" }}>Cancel</Button>
-                        <Button variant="secondary" onClick={(e) => onDeletedHandler(e)} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
+                        {props.datatransc ? (
+                            <Button variant="secondary" onClick={(e) => onCancelTransc(e)} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
+                        ) : (
+                            <Button variant="secondary" onClick={(e) => onDeletedHandler(e)} className="w-100" style={{ borderRadius: "10px 0 10px 0" }}>Yes, sure</Button>
+                        )}
                     </Modal.Footer>
                 </>
             )}

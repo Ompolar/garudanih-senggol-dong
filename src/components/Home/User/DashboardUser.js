@@ -192,47 +192,6 @@ export default function DashboardUser() {
                     <button type="button" class="btn btn-primary btn" style={{ paddingLeft: "30px", paddingRight: "30px" }}>More Info</button>
                 </div>
             </div>
-
-            <div style={{ backgroundColor: "#575A63" }}>
-                <font color="#FFFFFF" >
-                    <div class="row" style={{ padding: "100px" }}>
-                        <div class="col">
-                            <h5><b>Menu</b></h5><br />
-                            <p>Beranda</p>
-                            <p>Produk</p>
-                            <p>Kontak</p>
-                        </div>
-                        <div class="col">
-                            <h5><b>Kontak Kami</b></h5><br />
-                            <p>+0822-1023-777</p>
-                            <p>contoh@gmail.com</p>
-                            <p>Sleman, Yogyakarta</p>
-                        </div>
-                        <div class="col">
-                            <h5><b>Sosial Media</b></h5><br />
-                            <p>
-                                <img src="img/ig.png" style={{ width: "40px" }} /> <img src="img/yt.png" style={{ width: "40px" }} /> <img src="img/fb.png" style={{ width: "40px" }} />
-                            </p>
-                        </div>
-                        <div class="col">
-                            <h5><b>Kirim Pesan</b></h5><br />
-
-                            <div class="mb-3">
-
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Email" />
-                            </div>
-                            <div class="mb-3">
-
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Pesan"></textarea>
-                            </div>
-                            <button type="button" class="btn btn-primary " >Kirim</button>
-
-
-                        </div>
-                        <p>Created By GarudaNih.</p>
-                    </div>
-                </font>
-            </div>
         </div>
     );
 }

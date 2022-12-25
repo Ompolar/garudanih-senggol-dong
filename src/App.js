@@ -36,7 +36,7 @@ function App() {
           <Route path="admin/ticket/:id" element={<EditDataTicket />} />
           <Route path="admin/ticket/create" element={<CreateDataTicket />} />
           <Route path="admin/transaction" element={<ContainerDataTransc />} />
-          {/* routes user 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 */}
+          {/* routes user */}
           <Route path="ticket" element={<UserTicketPage />} />
           <Route path="ticket/:id" element={<DetailTicket />} />
           <Route path="transaction" element={<HistoryTransaction />} />

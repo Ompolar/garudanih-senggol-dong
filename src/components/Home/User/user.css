@@ -10,10 +10,31 @@
 
 .bg--home {
     height: 50vh;
-    background-image: url(../../../assets/Home.png);
+    background: linear-gradient(90deg, white, transparent), url(../../../assets/Home.png);
+    background-repeat: no-repeat, no-repeat;
+    background-position: left, bottom -50px right;
+    background-size: cover, cover;
+    margin-bottom: 2em;
+}
+
+.bg--why {
+    height: 50vh;
+    background-image: url(../../../assets/bg_why.png);
     background-size: cover;
     background-repeat: no-repeat;
-    margin-bottom: 2em;
+    margin: 3em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bg--why a {
+    text-decoration: none;
+    background: black;
+    color: white;
+    padding: .5em 2em;
+    border-radius: 10px;
 }
 
 .intro--user {
@@ -42,6 +63,188 @@
         background-size: 100% 100%;
     }
 }
+
+.dashboard--card {
+    width: 100%;
+    margin-bottom: 1.3em;
+    border: 1px solid #2F82FF;
+    transition: all .5s ease-out;
+}
+
+.dashboard--card:hover {
+    box-shadow: 1px 5px 20px -5px #2F82FF;
+}
+
+.dashboard--detail {
+    color: white;
+    background: #2F82FF;
+    padding: .8em;
+    text-decoration: none;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.plan-card {
+    background: #fff;
+    width: calc(100% - 0.68rem);
+    padding: 2rem 0 2rem 2rem;
+    border-radius: 10px;
+    transition: all .5s linear;
+    font-family: "Poppins", sans-serif;
+}
+
+.plan-card:hover {
+    box-shadow: 0 6px 30px rgba(207, 212, 222, 0.3);
+}
+
+.plan-card h2 {
+    margin-bottom: 15px;
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.plan-card h2 span {
+    display: block;
+    margin-top: -4px;
+    color: #4d4d4d;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.etiquet-price {
+    position: relative;
+    background: #FF4E4E;
+    margin-right: -0.68rem;
+    padding: .2rem 1.2rem;
+    border-radius: 5px 0 0 5px;
+}
+
+.etiquet-price p {
+    margin: 0;
+    padding-top: .4rem;
+    display: flex;
+    font-size: 1.9rem;
+    font-weight: 500;
+    color: white;
+}
+
+.etiquet-price p:before {
+    content: "Rp";
+    margin-right: 5px;
+    font-size: 15px;
+    font-weight: 300;
+    color: white;
+}
+
+.etiquet-price div {
+    position: absolute;
+    bottom: -23px;
+    right: 0px;
+    width: 0;
+    height: 0;
+    border-top: 13px solid #972c2c;
+    border-bottom: 10px solid transparent;
+    border-right: 13px solid transparent;
+    z-index: -6;
+}
+
+.dashboard--int {
+    width: 100%;
+    background-size: cover;
+    margin-bottom: 3em;
+    transition: all .5s ease-out;
+}
+
+.dashboard--int:hover {
+    box-shadow: 1px 5px 20px -5px #2F82FF;
+}
+
+.dashboard--int:hover .dashboard--card--footer::before {
+    height: 100%;
+    cursor: pointer;
+}
+
+.dashboard--int:hover .dashboard--card--footer a {
+    color: black;
+}
+
+.dashboard--card--footer {
+    position: relative;
+    transition: all .5s ease-in;
+}
+
+.dashboard--card--footer::before {
+    content: "";
+    width: 100%;
+    height: 0;
+    background: white;
+    position: absolute;
+    color: black;
+    left: 0;
+    bottom: 0;
+    transition: 0.3s ease-in-out;
+    border-radius: 0 0 5px 5px;
+}
+
+.dashboard--card--footer a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+}
+
+.dashboard--card--why {
+    height: 120px;
+    transition: all .5s;
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 2em;
+    cursor: pointer;
+}
+
+.dashboard--card--why:hover {
+    height: 224px;
+    background: white;
+    box-shadow: 1px 5px 10px -5px black;
+}
+
+.dashboard--card--why .header {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #212121;
+    margin-bottom: 16px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 96%);
+}
+
+.dashboard--card--why .header .img-box > * {
+    width: 50px;
+    color: white;
+    font-size: 50px;
+}
+
+.dashboard--card--why .header .dashboard--card--why--title {
+    font-size: 1.1em;
+    letter-spacing: .1em;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 4px 0 14px 0;
+    transition: all .5s;
+    color: white;
+}
+
+.dashboard--card--why:hover .dashboard--card--why .header .dashboard--card--why--title {
+    padding: 0;
+}
+
+.dashboard--card--why .dashboard--card--why--content {
+    color: #212121;
+    text-align: center;
+}
+
+/*  */
 
 /* ============= styling button booking ============= */
 

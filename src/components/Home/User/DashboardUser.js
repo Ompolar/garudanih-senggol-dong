@@ -1,197 +1,230 @@
-import imgProcess from '../../../assets/img_proces.png';
-import imgRefund from '../../../assets/img_refund.png';
-import imgTransaction from '../../../assets/img_transaction.png';
+import axios from "axios";
+import Carousel from "react-multi-carousel";
+import moment from "moment";
+import "react-multi-carousel/lib/styles.css";
+import { useEffect, useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFlightTicket } from '../../../actions/TicketAction';
+import CardSkeleton from "../../Loader/CardSkeleton";
+import { Link } from "react-router-dom";
+import { AccountBalanceWallet, AdminPanelSettings, AirplaneTicket } from "@mui/icons-material";
 
 export default function DashboardUser() {
+    const [domesticTicket, setDomesticTicket] = useState([])
+    const [internationalTicket, setInternationalTicket] = useState([])
+    const [image, setImage] = useState([])
+
+    const dispatch = useDispatch()
+
+    const { flightTicketResult } = useSelector((state) => state.TicketReducer)
+
+    useEffect(() => {
+
+        dispatch(getFlightTicket())
+
+    }, [dispatch])
+
+    useEffect(() => {
+
+        if (flightTicketResult) {
+            setDomesticTicket(flightTicketResult.filter((ticket) => ticket.flight === "DOMESTIC"))
+            setInternationalTicket(flightTicketResult.filter((ticket) => ticket.flight === "INTERNATIONAL"))
+        }
+
+    }, [flightTicketResult])
+
+    const responsive = {
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 3,
+            slidesToSlide: 3
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 464 },
+            items: 2,
+            slidesToSlide: 2
+        },
+        mobile: {
+            breakpoint: { max: 464, min: 0 },
+            items: 1,
+            slidesToSlide: 1
+        }
+    };
+
+    useEffect(() => {
+        const getImage = async (query) => await axios({ method: 'GET', url: `https://pixabay.com/api/?key=32369359-5b468d17bb149f9a77cb4200c&q=${query}&image_type=photo&pretty=true` })
+
+        let arrImg = []
+
+        if (internationalTicket.length !== 0) {
+            internationalTicket.forEach(async (ticket) => {
+                const image = ticket.destination.toLowerCase().split(", ")[1].replaceAll(" ", "+")
+
+                await getImage(image).then((res) => {
+                    arrImg.push(res.data.hits[0].webformatURL)
+                })
+                setImage(arrImg)
+            })
+
+        }
+
+
+    }, [internationalTicket])
+
     return (
         <div>
-            <h3 style={{ color: "#2F82FF", paddingLeft: "20px", marginTop: "70px" }}>GarudaNih Destination</h3>
+            <Container>
+                <h3 style={{ color: "#2F82FF", marginTop: "2em" }}>GarudaNih Destination</h3>
+                <p className="my-3 fs-5 fw-bold">Domestic</p>
+                <Row>
+                    {domesticTicket.length !== 0 ? (
+                        <Carousel
+                            swipeable={true}
+                            draggable={false}
+                            responsive={responsive}
+                            ssr={true}
+                            keyBoardControl={true}
+                            customTransition="all 1.5s ease-in-out"
+                            transitionDuration={500}
+                            containerClass="carousel-container"
+                            removeArrowOnDeviceType={["tablet", "mobile"]}
+                            dotListClass="custom-dot-list-style"
+                            showDots={true}
+                        >
+                            {domesticTicket.map((ticket, index) => {
+                                return (
+                                    <div key={index} className="d-flex align-items-stretch position-relative me-4">
+                                        <Card className="dashboard--card">
+                                            <Card.Body className="w-100 card-content">
+                                                <p style={{ color: "#2F82FF" }}>{ticket.code}</p>
+                                                <Row>
+                                                    <Col md="5">
+                                                        <p className="text-muted">From</p>
+                                                        <p className="fs-5 m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
+                                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
+                                                    </Col>
+                                                    <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
+                                                        <i className="bi bi-airplane fs-5"></i>
+                                                    </Col>
+                                                    <Col md="5">
+                                                        <p className="text-muted">To</p>
+                                                        <p className="fs-5 m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
+                                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
+                                                    </Col>
+                                                </Row>
+                                                <p>{moment(ticket.takeOff).format('ll')}</p>
+                                            </Card.Body>
+                                            <Link to={`ticket/${ticket.id}`} className="dashboard--detail">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</Link>
+                                        </Card>
+                                    </div>
+                                )
+                            })}
+                        </Carousel>
+                    ) : <CardSkeleton md="4" />}
+                </Row>
+                <p className="my-3 fs-5 fw-bold">International</p>
+                <Row>
+                    {internationalTicket.length !== 0 ? (
+                        <Carousel
+                            swipeable={true}
+                            draggable={false}
+                            responsive={responsive}
+                            ssr={true}
+                            keyBoardControl={true}
+                            customTransition="all 1.5s ease-in-out"
+                            transitionDuration={500}
+                            containerClass="carousel-container"
+                            removeArrowOnDeviceType={["tablet", "mobile"]}
+                            dotListClass="custom-dot-list-style"
+                            showDots={true}
+                        >
+                            {internationalTicket.map((ticket, index) => {
+                                return (
+                                    <div key={index} className="d-flex align-items-stretch position-relative me-4">
+                                        <Card className="dashboard--int" style={{ backgroundImage: `url(${image[index]})` }}>
+                                            <Card.Body className="w-100" style={{ backgroundColor: "rgba(0,0,0, 0.5)" }}>
+                                                <p style={{ color: "#2F82FF" }}>{ticket.code}</p>
+                                                <Row>
+                                                    <Col md="5" className="text-white">
+                                                        <p>From</p>
+                                                        <p className="fs-5 m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
+                                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
+                                                    </Col>
+                                                    <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
+                                                        <i className="bi bi-airplane fs-5"></i>
+                                                    </Col>
+                                                    <Col md="5" className="text-white">
+                                                        <p>To</p>
+                                                        <p className="fs-5 m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
+                                                        <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
+                                                    </Col>
+                                                </Row>
+                                                <p className="text-white">{moment(ticket.takeOff).format('ll')}</p>
+                                            </Card.Body>
+                                            <Card.Footer className="dashboard--card--footer">
+                                                <Link to={`ticket/${ticket.id}`}>Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</Link>
+                                            </Card.Footer>
+                                        </Card>
+                                    </div>
+                                )
+                            })}
+                        </Carousel>
+                    ) : <CardSkeleton md="4" />}
+                </Row>
+            </Container>
 
-            <div class="card-group" >
-                <div class="card rounded-4 shadow-sm" style={{ margin: "10px" }}>
-                    <img src="img/card1.jpg" class="card-img-top rounded" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Istanbul</h5>
-                        <p class="card-text"><small class="text-muted"><img src="img/Location.png" />Turkey</small></p>
-                    </div>
-                </div>
-                <div class="card rounded-4 shadow-sm" style={{ margin: "10px" }}>
-                    <img src="img/card1.jpg" class="card-img-top rounded" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">London</h5>
-                        <p class="card-text"><small class="text-muted"><img src="img/Location.png" />Jawa Timur</small></p>
-                    </div>
-                </div>
-                <div class="card rounded-4 shadow-sm" style={{ margin: "10px" }}>
-                    <img src="img/card1.jpg" class="card-img-top rounded" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Jakarta</h5>
-                        <p class="card-text"><small class="text-muted"><img src="img/Location.png" />Jawa Timur</small></p>
-                    </div>
-                </div>
-                <div class="card rounded-4 shadow-sm" style={{ margin: "10px" }}>
-                    <img src="img/card1.jpg" class="card-img-top rounded" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Bali</h5>
-
-                        <p class="card-text"><small class="text-muted"><img src="img/Location.png" />Jawa Barat</small></p>
-                    </div>
-                </div>
-                <div class="card rounded-4 shadow-sm" style={{ margin: "10px" }}>
-                    <img src="img/card1.jpg" class="card-img-top rounded" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Seoul</h5>
-
-                        <p class="card-text"><small class="text-muted"><img src="img/Location.png" />Jawa Barat</small></p>
-                    </div>
-                </div>
+            <div className="bg--why">
+                <h3>Safe Flight With <span style={{ color: "#2F82FF" }}>GarudaNih</span></h3>
+                <h4>#GarudaNih with you</h4>
+                <Link to={"ticket"}>More Info</Link>
             </div>
 
-            <div class="card rounded-0 border-0" style={{ marginTop: "70px" }}>
-                <img src="img/bg2.png" />
-
-                <div class="card-img-overlay font-weight-bolder mt-5" style={{ margin: "150px" }}>
-
-                    <h2 style={{ textAlign: "center", paddingBottom: "50px" }}>Penerbangan Favorit</h2>
-
-                    <div class="row row-cols-1 row-cols-md-2 g-4">
-                        <div class="col">
-                            <div class="card rounded-5">
-
-                                <div class="row" style={{ padding: "30px" }}>
-                                    <div class="col">
-                                        <img src="img/brazil.png" style={{ width: "230px", marginLeft: "40px" }} />
-                                    </div>
-                                    <div class="col">
-                                        <h4 class="card-title">Brazil</h4>
-                                        <p class="card-text"><small class="text-muted"> Selasa, 15 Nov 2022 18:40</small></p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        <p style={{ color: "#43D949" }}>Available</p>
-                                        <h5 style={{ color: "#2F82FF" }}>IDR 999K <button type="button" class="btn btn-primary " style={{ margin: "30px" }} >Detil</button></h5>
-
-                                    </div>
+            <Container>
+                <h3 style={{ color: "#2F82FF", margin: "1.4em 0" }}>Why GarudaNih</h3>
+                <Row>
+                    <Col md="4">
+                        <div className="dashboard--card--why">
+                            <div className="header">
+                                <div className="img-box">
+                                    <AccountBalanceWallet />
                                 </div>
-
+                                <h1 className="dashboard--card--why--title">Transaksi</h1>
+                            </div>
+                            <div className="dashboard--card--why--content">
+                                <p>Proses order cepat dan gak pake ribet untuk semua jenis tiket</p>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="card rounded-5">
-                                <div class="row" style={{ padding: "30px" }}>
-                                    <div class="col">
-                                        <img src="img/brazil.png" style={{ width: "230px", marginLeft: "40px" }} />
-                                    </div>
-                                    <div class="col">
-                                        <h4 class="card-title">Brazil</h4>
-                                        <p class="card-text"><small class="text-muted"> Selasa, 15 Nov 2022 18:40</small></p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        <p style={{ color: "#43D949" }}>Available</p>
-                                        <h5 style={{ color: "#2F82FF" }}>IDR 999K <button type="button" class="btn btn-primary " style={{ margin: "30px" }} >Detil</button></h5>
-
-                                    </div>
+                    </Col>
+                    <Col md="4">
+                        <div className="dashboard--card--why">
+                            <div className="header">
+                                <div className="img-box">
+                                    <AirplaneTicket />
                                 </div>
+                                <h1 className="dashboard--card--why--title">Ticket</h1>
+                            </div>
+                            <div className="dashboard--card--why--content">
+                                <p>Berbagai macam pilihan penerbangan mulai domestik sampai international</p>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="card rounded-5">
-                                <div class="row" style={{ padding: "30px" }}>
-                                    <div class="col">
-                                        <img src="img/brazil.png" style={{ width: "230px", marginLeft: "40px" }} />
-                                    </div>
-                                    <div class="col">
-                                        <h4 class="card-title">Brazil</h4>
-                                        <p class="card-text"><small class="text-muted"> Selasa, 15 Nov 2022 18:40</small></p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        <p style={{ color: "#43D949" }}>Available</p>
-                                        <h5 style={{ color: "#2F82FF" }}>IDR 999K <button type="button" class="btn btn-primary " style={{ margin: "30px" }} >Detil</button></h5>
-
-                                    </div>
+                    </Col>
+                    <Col md="4">
+                        <div className="dashboard--card--why">
+                            <div className="header">
+                                <div className="img-box">
+                                    <AdminPanelSettings />
                                 </div>
+                                <h1 className="dashboard--card--why--title">Security</h1>
+                            </div>
+                            <div className="dashboard--card--why--content">
+                                <p>Kemudahan, keamanan, dan kenyamanan pengguna prioritas utama</p>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="card rounded-5">
-                                <div class="row" style={{ padding: "30px" }}>
-                                    <div class="col">
-                                        <img src="img/brazil.png" style={{ width: "230px", marginLeft: "40px" }} />
-                                    </div>
-                                    <div class="col">
-                                        <h4 class="card-title">Brazil</h4>
-                                        <p class="card-text"><small class="text-muted"> Selasa, 15 Nov 2022 18:40</small></p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        <p style={{ color: "#43D949" }}>Available</p>
-                                        <h5 style={{ color: "#2F82FF" }}>IDR 999K <button type="button" class="btn btn-primary" style={{ margin: "30px" }} >Detil</button></h5>
+                    </Col>
+                </Row>
+            </Container>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-            </div>
-
-
-            <h3 style={{ textAlign: "center", padding: "50px" }}> Kenapa Harus <font color="#2F82FF"> GarudaNih.?</font></h3>
-            <div class="row" style={{ marginLeft: "250px", marginRight: "250px" }}>
-                <div class="col" >
-                    <div class="border border-dark border-2 rounded-4 p-2 mb-2" style={{ marginRight: "50px" }}>
-                        <div class="row" style={{ marginTop: "20px" }} >
-                            <div class="col">
-                                <img src={imgProcess} style={{ marginLeft: "30px" }} />
-                            </div>
-                            <div class="col">
-                                <b>Proses Order <br />Cepat & Gratis</b>
-                            </div>
-                        </div>
-                        <p style={{ marginLeft: "30px" }}>Untuk semua jenis tiket</p>
-                    </div>
-                </div>
-                <div class="col">
-
-                    <div class="border border-dark border-2 rounded-4 p-2 mb-2" style={{ marginLeft: "25px", marginRight: "25px" }}>
-                        <div class="row" style={{ marginTop: "20px" }}>
-                            <div class="col">
-                                <img src={imgRefund} style={{ marginLeft: "30px" }} />
-                            </div>
-                            <div class="col">
-                                <b>Pengembalian <br />Tiket 10 Hari</b>
-                            </div>
-                        </div>
-                        <p style={{ marginLeft: "30px" }}>Garansi uang kembali</p>
-                    </div>
-
-
-                </div>
-                <div class="col">
-                    <div class="border border-dark border-2 rounded-4 p-2 mb-2 " style={{ marginLeft: "50px" }}>
-                        <div class="row" style={{ marginTop: "20px" }}>
-                            <div class="col">
-                                <img src={imgTransaction} style={{ marginLeft: "30px" }} />
-                            </div>
-                            <div class="col">
-                                <b>Transaksi <br /> Aman</b>
-                            </div>
-                        </div>
-                        <p style={{ marginLeft: "30px" }}>Dilindungi PayPal</p>
-                    </div>
-                </div>
-
-            </div>
-
-
-
-
-            <div class="card rounded-0 border-0" style={{ marginTop: "70px" }}>
-                <img src="img/bg3.png" />
-                <div class="card-img-overlay font-weight-bolder mt-5" style={{ padding: "120px", textAlign: "center" }}>
-                    <h1> Safe Flight With <font color="#2F82FF"><u>Garu</u>da</font><b>Nih</b><font color="#2F82FF">.</font></h1> <br />
-                    <h3 >#GarudaNih with you</h3> <br />
-                    <button type="button" class="btn btn-primary btn" style={{ paddingLeft: "30px", paddingRight: "30px" }}>More Info</button>
-                </div>
-            </div>
         </div>
     );
 }

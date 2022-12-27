@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import LoadingCircle from '../../Loader/LoadingCircle';
 
 
 export default function DetailTicket() {
@@ -298,7 +299,7 @@ export default function DetailTicket() {
 
 
                 </Row>
-            ) : "Loading"
+            ) : (<LoadingCircle styled="d-flex justify-content-center" />)
             }
         </Container >
     );

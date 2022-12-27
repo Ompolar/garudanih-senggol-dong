@@ -100,7 +100,7 @@ export default function NavUser() {
                             <Dropdown.Menu>
                                 {notification.length !== 0 ? (
                                     notification.map((item, index) => {
-                                        return item.isRead !== true ? (
+                                        return !item.isRead ? (
                                             <>
                                                 <div key={index} className="d-flex px-2">
                                                     <div style={{ width: "200px" }}>

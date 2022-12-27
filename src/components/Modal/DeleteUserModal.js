@@ -14,7 +14,7 @@ export default function DeleteModal(props) {
         setInterval(() => {
             axios({
                 method: 'DELETE',
-                url: `https://api-ticket.up.railway.app/v1/admin/delete/${props.userid}`,
+                url: `${process.env.REACT_APP_BASE_URL}/v1/admin/delete/${props.userid}`,
                 timeout: 120000,
                 headers: {
                     "Authorization": `Bearer ${props.accesstoken}`
@@ -64,7 +64,7 @@ export default function DeleteModal(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Are you sure want to delete <span className="text-danger fw-bold">{props.username}</span> account permanently ?</p>
+                        <p>Are you sure want to delete <span className="text-danger fw-bold">{props.username} - {props.userid}</span> account permanently ?</p>
                     </Modal.Body>
                     <Modal.Footer className="d-flex flex-nowrap border-0">
                         <Button onClick={props.onHide} className="w-100" style={{ borderRadius: "0 10px 0 10px" }}>Cancel</Button>

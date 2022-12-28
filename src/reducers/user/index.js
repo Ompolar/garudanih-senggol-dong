@@ -3,17 +3,22 @@ import {
     USER_LOGIN_GOOGLE,
     USER_REGISTER,
     USER_LOGOUT,
-    CURRENT_USER
+    CURRENT_USER,
+    USER_HISTORY,
 } from "../../actions/UserAction";
 
 export const initialState = {
     userLoginResult: false,
     userLoginError: false,
     userLoginLoading: false,
+
     userRegisterResult: false,
     userRegisterError: false,
     userRegisterLoading: false,
+
     currentUserData: false,
+
+    userHistoryData: false,
 }
 
 const user = (state = initialState, action) => {
@@ -47,6 +52,11 @@ const user = (state = initialState, action) => {
                 currentUserData: action.payload.data,
                 userLoginError: action.payload.errorMessage,
                 userLoginLoading: action.payload.loading
+            }
+        case USER_HISTORY:
+            return {
+                ...state,
+                userHistoryData: action.payload.data,
             }
         default:
             return state

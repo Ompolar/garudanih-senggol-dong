@@ -18,6 +18,8 @@ import DetailTicket from './components/Home/User/DetailTicket';
 import HistoryTransaction from './components/Home/User/HistoryTransaction';
 import ContentIndex from './pages/ContentIndex';
 import UserTicketPage from './pages/UserTicketPage';
+import UserProfilePage from './pages/UserProfilePage';
+import ProfileIndex from './components/Home/User/ProfileIndex';
 
 function App() {
   return (
@@ -40,6 +42,9 @@ function App() {
           <Route path="ticket" element={<UserTicketPage />} />
           <Route path="ticket/:id" element={<DetailTicket />} />
           <Route path="transaction" element={<HistoryTransaction />} />
+          <Route path="profile" element={<UserProfilePage />} >
+            <Route index element={<ProfileIndex />} />
+          </Route>
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

@@ -428,3 +428,26 @@
     color: white;
     margin-right: 1em;
 }
+
+/* ============= styling profile page ============= */
+
+.nav--profile {
+    position: relative;
+    background: #dadada;
+    padding: 1em 1.5em;
+    border-radius: 0 0 5px 5px;
+}
+
+.nav--profile a {
+    text-decoration: none;
+    color: black;
+    padding: 1em 1.5em;
+}
+
+.nav--profile a.active {
+    border-bottom: 2px solid #2F82FF;
+}
+
+.nav--profile a:not(.active):hover {
+    border-bottom: 2px solid #FF4E4E;
+}

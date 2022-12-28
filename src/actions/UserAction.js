@@ -5,6 +5,7 @@ export const USER_LOGIN_GOOGLE = "USER_LOGIN_GOOGLE"
 export const USER_LOGOUT = "USER_LOGOUT"
 export const CURRENT_USER = "CURRENT_USER"
 export const USER_REGISTER = "USER_REGISTER"
+export const USER_HISTORY = "USER_HISTORY"
 
 export const actionUserRegister = (body) => {
     return (dispatch) => {
@@ -175,6 +176,48 @@ export const actionCurrentUser = (token) => {
             .catch((err) => {
                 dispatch({
                     type: CURRENT_USER,
+                    payload: {
+                        loading: false,
+                        data: false,
+                        errorMessage: err.message
+                    }
+                })
+            })
+    }
+}
+
+export const actionUserHistory = (token) => {
+    return (dispatch) => {
+        dispatch({
+            type: USER_HISTORY,
+            payload: {
+                loading: false,
+                data: false,
+                errorMessage: false
+            }
+        })
+
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/history`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: USER_HISTORY,
+                    payload: {
+                        loading: false,
+                        data: response.data,
+                        errorMessage: false
+                    }
+                })
+            })
+            .catch((err) => {
+                dispatch({
+                    type: USER_HISTORY,
                     payload: {
                         loading: false,
                         data: false,

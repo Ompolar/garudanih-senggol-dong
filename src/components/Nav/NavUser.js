@@ -162,7 +162,7 @@ export default function NavUser() {
                                             </div>
                                         }
                                     >
-                                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                                        <Link to={"/profile"} className="text-decoration-none px-3 py-5 text-black">Profile</Link>
                                         <NavDropdown.Divider />
                                         <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                                     </NavDropdown>

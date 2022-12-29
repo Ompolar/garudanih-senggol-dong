@@ -31,7 +31,7 @@ export default function ProfileIndex() {
 
     return (
         <Row className="my-4">
-            <Col md="5">
+            <Col md="5" className="mb-4">
                 <Card>
                     <Card.Body>
                         <span>Personal Information</span>
@@ -79,7 +79,7 @@ export default function ProfileIndex() {
                                 <span>Transaction</span>
                                 {dataTransaction ? (
                                     <>
-                                        <ProgressBar now={60} className="my-3" />
+                                        <ProgressBar now={dataTransaction.success} max={dataTransaction.total} className="my-3 rounded-0" />
                                         <span className="fw-bold">{dataTransaction.success} of {dataTransaction.total} success<span className="ms-2 fw-normal text-muted">({(dataTransaction.success/dataTransaction.total)*100}% of total transaction successfully)</span></span>
                                     </>
                                 ) : ""}

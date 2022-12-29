@@ -5,6 +5,8 @@ import {
     USER_LOGOUT,
     CURRENT_USER,
     USER_HISTORY,
+    USER_UPDATE,
+    RESET_MESSAGE,
 } from "../../actions/UserAction";
 
 export const initialState = {
@@ -19,6 +21,8 @@ export const initialState = {
     currentUserData: false,
 
     userHistoryData: false,
+
+    userUpdateResult: false,
 }
 
 const user = (state = initialState, action) => {
@@ -46,6 +50,11 @@ const user = (state = initialState, action) => {
             }
         case USER_LOGOUT:
             return initialState
+        case RESET_MESSAGE:
+            return {
+                ...state,
+                userUpdateResult: false,
+            }
         case CURRENT_USER:
             return {
                 ...state,
@@ -57,6 +66,11 @@ const user = (state = initialState, action) => {
             return {
                 ...state,
                 userHistoryData: action.payload.data,
+            }
+        case USER_UPDATE:
+            return {
+                ...state,
+                userUpdateResult: action.payload.data,
             }
         default:
             return state

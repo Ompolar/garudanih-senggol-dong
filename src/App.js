@@ -20,6 +20,8 @@ import ContentIndex from './pages/ContentIndex';
 import UserTicketPage from './pages/UserTicketPage';
 import UserProfilePage from './pages/UserProfilePage';
 import ProfileIndex from './components/Home/User/ProfileIndex';
+import ProfileEdit from './components/Home/User/ProfileEdit';
+import ProfileNotification from './components/Home/User/ProfileNotification';
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
           <Route path="transaction" element={<HistoryTransaction />} />
           <Route path="profile" element={<UserProfilePage />} >
             <Route index element={<ProfileIndex />} />
+            <Route path="edit" element={<ProfileEdit />} />
+            <Route path="notification" element={<ProfileNotification />} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />

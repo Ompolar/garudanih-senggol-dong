@@ -6,6 +6,8 @@ export const USER_LOGOUT = "USER_LOGOUT"
 export const CURRENT_USER = "CURRENT_USER"
 export const USER_REGISTER = "USER_REGISTER"
 export const USER_HISTORY = "USER_HISTORY"
+export const USER_UPDATE = "USER_UPDATE"
+export const RESET_MESSAGE = "RESET_MESSAGE"
 
 export const actionUserRegister = (body) => {
     return (dispatch) => {
@@ -222,6 +224,51 @@ export const actionUserHistory = (token) => {
                         loading: false,
                         data: false,
                         errorMessage: err.message
+                    }
+                })
+            })
+    }
+}
+
+export const actionUserUpdate = (body, token) => {
+    return (dispatch) => {
+        dispatch({
+            type: USER_UPDATE,
+            payload: {
+                loading: true,
+                data: false,
+                errorMessage: false
+            }
+        })
+
+        axios({
+            method: 'PUT',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/update`,
+            timeout: 120000,
+            data: body,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                dispatch({
+                    type: USER_UPDATE,
+                    payload: {
+                        loading: false,
+                        data: response.data,
+                        errorMessage: false
+                    }
+                })
+                
+                dispatch(actionCurrentUser(localStorage.getItem("token")))
+            })
+            .catch((err) => {
+                dispatch({
+                    type: USER_UPDATE,
+                    payload: {
+                        loading: false,
+                        data: false,
+                        errorMessage: err.response.data.message
                     }
                 })
             })

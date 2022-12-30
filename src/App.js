@@ -9,6 +9,7 @@ import ContainerDataTicket from './components/Home/Admin/ContainerDataTicket';
 import ContainerDataTransc from './components/Home/Admin/ContainerDataTransc';
 import EditDataUser from './components/Home/Admin/EditDataUser';
 import EditDataTicket from './components/Home/Admin/EditDataTicket';
+import EditProfile from './components/Home/Admin/EditProfile';
 import CreateDataUser from './components/Home/Admin/CreateDataUser';
 import CreateDataTicket from './components/Home/Admin/CreateDataTicket';
 
@@ -33,6 +34,7 @@ function App() {
           </Protected>
         }>
           <Route index element={<ContentIndex />} />
+          <Route path="admin" element={<EditProfile />} />
           <Route path="admin/user" element={<ContainerDataUser />} />
           <Route path="admin/user/:id" element={<EditDataUser />} />
           <Route path="admin/user/create" element={<CreateDataUser />} />

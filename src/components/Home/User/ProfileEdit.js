@@ -1,6 +1,5 @@
 import moment from 'moment';
 import imgHolder from '../../../assets/logo.svg';
-import DeleteUserModal from '../../Modal/DeleteUserModal';
 import LoadingSpinner from '../../LoadingSpinner'
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
@@ -11,12 +10,10 @@ import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Cake, MailOutline, Person, Phone, Room } from "@mui/icons-material";
 import { actionUserUpdate } from "../../../actions/UserAction";
-import { useNavigate } from 'react-router-dom';
 
 export default function ProfileEdit() {
     const [open, setOpen] = useState(false);
     const [imageFile, setImageFile] = useState(imgHolder)
-    const [modalShow, setModalShow] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const { currentUserData, userUpdateResult } = useSelector((state) => state.UserReducer)
@@ -32,7 +29,6 @@ export default function ProfileEdit() {
 
     const fileRef = useRef()
     const dispatch = useDispatch()
-    const navigate = useNavigate()
 
     const token = localStorage.getItem("token");
 
@@ -49,6 +45,19 @@ export default function ProfileEdit() {
             if (currentUserData.image) setImageFile(currentUserData.image)
         }
     }, [currentUserData])
+
+    useEffect(() => {
+        if (userUpdateResult) {
+            setOpen(true)
+
+            const timer = setTimeout(() => {
+                dispatch({ type: "RESET_MESSAGE" })
+            }, 2500)
+
+            return () => clearTimeout(timer)
+        }
+
+    }, [dispatch, userUpdateResult])
 
     const onChangeHandler = (e) => {
         setBody({ ...body, [e.target.name]: e.target.value })
@@ -169,7 +178,6 @@ export default function ProfileEdit() {
                     </Row>
                 ) : ""}
                 <Card.Footer className="d-flex bg-white p-4">
-                    <button className="btn btn-danger me-auto" onClick={() => setModalShow(true)}><i className="bi bi-trash-fill me-2"></i>Delete Account</button>
                     <button type="submit" className="btn btn-primary">{loading ? <LoadingSpinner /> : (
                         <>
                             <i className="bi bi-save2-fill me-2"></i>Save Changes
@@ -177,13 +185,6 @@ export default function ProfileEdit() {
                     )}</button>
                 </Card.Footer>
             </Form>
-            <DeleteUserModal
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                userid={currentUserData.id}
-                username={currentUserData.name}
-                accesstoken={token}
-            />
         </Card>
     );
 }

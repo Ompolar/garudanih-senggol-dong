@@ -1,8 +1,50 @@
 import "./admin.css";
+import axios from "axios";
 import { Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function DashboardContent() {
+    const [user, setUser] = useState(null)
+    const [ticket, setTicket] = useState(null)
+    const [transaction, setTransaction] = useState(null)
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/admin/all`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then((res) => setUser(res.data.data.user.length))
+            .catch((err) => console.log(err.message))
+
+    }, [])
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/ticket`,
+            timeout: 120000,
+        })
+            .then((res) => setTicket(res.data.data.tickets.length))
+            .catch((err) => console.log(err.message))
+    }, [])
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/trans`,
+            timeout: 120000
+        })
+            .then((res) => setTransaction(res.data.data.transaction.length))
+            .catch((err) => console.log(err.message))
+    }, [])
+
     return (
         <div className="p-3">
             <div className="d-flex">
@@ -17,7 +59,7 @@ export default function DashboardContent() {
                                 <div className="card-icon"><i className="bi bi-people-fill"></i></div>
                                 <div>
                                     <p>Total User</p>
-                                    <p className="fs-1 my-0">13</p>
+                                    <p className="fs-1 my-0">{user || ""}</p>
                                     <p>Account has registered</p>
                                 </div>
                             </div>
@@ -32,7 +74,7 @@ export default function DashboardContent() {
                                 <div className="card-icon"><i className="bi bi-ticket-perforated-fill"></i></div>
                                 <div>
                                     <p>Total Ticket</p>
-                                    <p className="fs-1 my-0">13</p>
+                                    <p className="fs-1 my-0">{ticket || ""}</p>
                                     <p>Ticket was created</p>
                                 </div>
                             </div>
@@ -47,7 +89,7 @@ export default function DashboardContent() {
                                 <div className="card-icon"><i className="bi bi-receipt-cutoff"></i></div>
                                 <div>
                                     <p>Transactions</p>
-                                    <p className="fs-1 my-0">13</p>
+                                    <p className="fs-1 my-0">{transaction || ""}</p>
                                     <p>Total ever made</p>
                                 </div>
                             </div>

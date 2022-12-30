@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { actionUserLogout } from '../../actions/UserAction';
 import React from "react"
+import { ExitToApp, PersonOutlined } from "@mui/icons-material";
 
 function Navigation() {
     const navigate = useNavigate()
@@ -51,9 +52,9 @@ function Navigation() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-                <Dropdown.Item><Link to={"/profile-admin"} className="text-black text-decoration-none"><i className="bi bi-person-fill me-2"></i>Profile</Link></Dropdown.Item>
+                <Link to={"admin"} className="text-decoration-none px-3 py-5 text-black"><PersonOutlined className="me-3" />Profile</Link>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}><i className="bi bi-box-arrow-left me-2"></i>Logout</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}><ExitToApp className="me-3" />Logout</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>
     )

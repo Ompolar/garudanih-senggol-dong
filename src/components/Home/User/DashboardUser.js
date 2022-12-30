@@ -14,6 +14,7 @@ export default function DashboardUser() {
     const [domesticTicket, setDomesticTicket] = useState([])
     const [internationalTicket, setInternationalTicket] = useState([])
     const [image, setImage] = useState([])
+    const [imageDomestic, setImageDomestic] = useState([])
 
     const dispatch = useDispatch()
 
@@ -57,6 +58,25 @@ export default function DashboardUser() {
 
         let arrImg = []
 
+        if (domesticTicket.length !== 0) {
+            domesticTicket.forEach(async (ticket) => {
+                const image = ticket.destination.toLowerCase().split(", ")[1].replaceAll(" ", "+")
+
+                await getImage(image).then((res) => {
+                    arrImg.push(res.data.hits[0].webformatURL)
+                })
+                setImageDomestic(arrImg)
+            })
+
+        }
+
+    }, [domesticTicket])
+
+    useEffect(() => {
+        const getImage = async (query) => await axios({ method: 'GET', url: `https://pixabay.com/api/?key=32369359-5b468d17bb149f9a77cb4200c&q=${query}&image_type=photo&pretty=true` })
+
+        let arrImg = []
+
         if (internationalTicket.length !== 0) {
             internationalTicket.forEach(async (ticket) => {
                 const image = ticket.destination.toLowerCase().split(", ")[1].replaceAll(" ", "+")
@@ -68,7 +88,6 @@ export default function DashboardUser() {
             })
 
         }
-
 
     }, [internationalTicket])
 
@@ -95,27 +114,29 @@ export default function DashboardUser() {
                             {domesticTicket.map((ticket, index) => {
                                 return (
                                     <div key={index} className="d-flex align-items-stretch position-relative me-4">
-                                        <Card className="dashboard--card">
-                                            <Card.Body className="w-100 card-content">
+                                        <Card className="dashboard--int" style={{ backgroundImage: `url(${imageDomestic[index]})` }}>
+                                            <Card.Body className="w-100" style={{ backgroundColor: "rgba(0,0,0, 0.5)" }}>
                                                 <p style={{ color: "#2F82FF" }}>{ticket.code}</p>
                                                 <Row>
-                                                    <Col md="5">
-                                                        <p className="text-muted">From</p>
+                                                    <Col md="5" className="text-white">
+                                                        <p>From</p>
                                                         <p className="fs-5 m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
                                                         <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
                                                     </Col>
                                                     <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
                                                         <i className="bi bi-airplane fs-5"></i>
                                                     </Col>
-                                                    <Col md="5">
-                                                        <p className="text-muted">To</p>
+                                                    <Col md="5" className="text-white">
+                                                        <p>To</p>
                                                         <p className="fs-5 m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
                                                         <p className="fw-bold" style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
                                                     </Col>
                                                 </Row>
-                                                <p>{moment(ticket.takeOff).format('ll')}</p>
+                                                <p className="text-white">{moment(ticket.takeOff).format('ll')}</p>
                                             </Card.Body>
-                                            <Link to={`ticket/${ticket.id}`} className="dashboard--detail">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</Link>
+                                            <Card.Footer className="dashboard--card--footer">
+                                                <Link to={`ticket/${ticket.id}`}>Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</Link>
+                                            </Card.Footer>
                                         </Card>
                                     </div>
                                 )

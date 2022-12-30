@@ -2,7 +2,7 @@ import imgLogo from '../../assets/logo.svg';
 import axios from 'axios';
 import io from "socket.io-client";
 import moment from 'moment';
-import { Container, Image, Nav, Navbar, NavDropdown, Offcanvas, Dropdown } from "react-bootstrap";
+import { Container, Image, Nav, Navbar, NavDropdown, Offcanvas, Dropdown, Button } from "react-bootstrap";
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionUserLogout } from '../../actions/UserAction';
@@ -60,8 +60,8 @@ export default function NavUser() {
     //         })
 
     //     socket?.on("show notify", body => {
-    //         setNotification(body.data)
     //         const filtering = body.data.filter((notify) => !notify.isRead)
+    //         setNotification(filtering)
     //         setCount(filtering.length)
     //     });
     // }, [socket, notification])
@@ -97,20 +97,17 @@ export default function NavUser() {
                                 )}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
+                            <Dropdown.Menu className="user--notif--dropdown">
                                 {notification.length !== 0 ? (
                                     notification.map((item, index) => {
                                         return !item.isRead ? (
-                                            <>
-                                                <div key={index} className="d-flex px-2">
-                                                    <div style={{ width: "200px" }}>
-                                                        <p className="mb-0" style={{ fontSize: "12px" }}>{item.desc}</p>
-                                                        <p className="text-muted">{moment(item.createdAt).startOf('hour').fromNow()}</p>
-                                                    </div>
-                                                    <button onClick={() => onReadHandler(item.id)}>Read</button>
+                                            <div key={index} className="user--notif--item">
+                                                <div>
+                                                    <p className="user--notif--desc">{item.desc}</p>
+                                                    <span className="text-muted">{moment(item.createdAt).startOf('hour').fromNow()}</span>
                                                 </div>
-                                                <Dropdown.Divider />
-                                            </>
+                                                <Button variant="outline-dark" className="align-self-center" onClick={() => onReadHandler(item.id)}>Read</Button>
+                                            </div>
                                         ) : (
                                             <>
                                                 <div key={index} className="d-flex px-2 bg-secondary">

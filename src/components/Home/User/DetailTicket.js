@@ -5,11 +5,10 @@ import axios from "axios";
 import moment from "moment";
 import { AirlineSeatReclineExtra, AssignmentInd, Pin } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip, ToggleButton } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import LoadingCircle from '../../Loader/LoadingCircle';
-
 
 export default function DetailTicket() {
     const { id } = useParams()
@@ -22,10 +21,12 @@ export default function DetailTicket() {
     const [requestBody, setRequestBody] = useState({
         ktp: "",
         orderBy: "",
-        numChair: 0,
+        numChair: '0',
         returnTicketId: null,
         returnTicketChair: 0,
     })
+
+    const [radios, setRadios] = useState([]);
 
     useEffect(() => {
         axios({
@@ -46,10 +47,19 @@ export default function DetailTicket() {
             for (let i = 0; i < data.ticket.totalChair; i++) {
                 const found = data.ticket.bookingBy.some(el => el.numChair === i);
 
-                if (!found) arr.push({ value: i, label: i });
+                if (!found) arr.push({ value: `${i}`, label: `${i}` });
             }
             setNumberOptions(arr)
+
+            let array = []
+
+            for (let index = 0; index < data.ticket.totalChair; index++) {
+                array.push({ name: `${index}`, value: `${index}` });
+            }
+
+            setRadios(array)
         }
+        
     }, [data])
 
     useEffect(() => {
@@ -172,7 +182,7 @@ export default function DetailTicket() {
                                     <p className="bg-primary py-1 px-3 rounded text-white">{data.ticket.bookingBy.length} / {data.ticket.totalChair}</p>
                                 </div>
                                 <div className="d-flex flex-wrap justify-content-between">
-                                    {[...Array(data.ticket.totalChair)].map((x, i) => {
+                                    {radios.map((radio, i) => {
                                         return (
                                             data.ticket.bookingBy.some(el => el.numChair === i) ? (
                                                 <OverlayTrigger
@@ -187,9 +197,22 @@ export default function DetailTicket() {
                                                     </div>
                                                 </OverlayTrigger>
                                             ) : (
-                                                <div key={i} className="seat--list">
-                                                    <p className="my-auto">{i}</p>
-                                                </div>
+                                                <ToggleButton
+                                                    key={i}
+                                                    id={`radio-${i}`}
+                                                    type="radio"
+                                                    variant="outline-primary"
+                                                    className="seat--list"
+                                                    name="radio"
+                                                    value={radio.value}
+                                                    checked={requestBody.numChair === radio.value}
+                                                    onChange={(e) => setRequestBody({...requestBody, numChair: e.currentTarget.value})}
+                                                >
+                                                    {radio.name}
+                                                </ToggleButton>
+                                                // <div key={i} className="seat--list">
+                                                //     <p className="my-auto">{i}</p>
+                                                // </div>
                                             )
                                         )
                                     })}

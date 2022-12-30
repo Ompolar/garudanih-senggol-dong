@@ -81,7 +81,7 @@ body {
     height: auto;
 }
 
-/* ==================== STYLING NAVUSER #2F82FF ==================== */
+/* ==================== STYLING NAVUSER ==================== */
 .navbar-brand {
     display: flex;
     align-items: center;
@@ -159,6 +159,32 @@ body {
 
 .dropdown-toggle::after {
     display: none !important;
+}
+
+.user--notif--dropdown {
+    width: 50vh;
+    height: 75vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    border-radius: 0;
+    border: 0;
+    box-shadow: 1px 5px 20px -5px #2F82FF;
+}
+
+.user--notif--item {
+    display: flex;
+    padding: 1em;
+}
+
+.user--notif--item:hover {
+    background: #F3F7FD;
+}
+
+.user--notif--desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .btn--notification {

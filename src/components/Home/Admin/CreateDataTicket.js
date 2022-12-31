@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from "moment"
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, Form } from "react-bootstrap";
@@ -7,17 +8,21 @@ import FlightLandIcon from '@mui/icons-material/FlightLand';
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import LoadingSpinner from '../../LoadingSpinner';
-import { CalendarMonth, FamilyRestroom, Public } from '@mui/icons-material';
+import { AirlineSeatReclineExtra, CalendarMonth, FamilyRestroom, Public } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { OutlinedInput } from "@mui/material";
 
 export default function CreateDataTicket() {
     const [loading, setLoading] = useState(false)
+    const [takeOff, setTakeOff] = useState(moment())
+    const [arrive, setArrive] = useState(moment())
     const [reqBody, setReqBody] = useState({
         departure: "",
         departureCode: "",
         destination: "",
         destinationCode: "",
-        takeOff: "",
-        arrive: "",
         type: "",
         class: "",
         price: 0,
@@ -28,7 +33,7 @@ export default function CreateDataTicket() {
     const navigate = useNavigate()
 
     const onChangeHandler = (e) => {
-        if(e.target.name.includes("Code")){
+        if (e.target.name.includes("Code")) {
             setReqBody({ ...reqBody, [e.target.name]: e.target.value.toUpperCase() })
         } else {
             setReqBody({ ...reqBody, [e.target.name]: e.target.value })
@@ -37,13 +42,15 @@ export default function CreateDataTicket() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault()
-        setLoading(true)
         
+        console.log({ ...reqBody, takeOff: takeOff._d, arrive: arrive._d })
+        setLoading(true)
+
         axios({
             method: 'POST',
             url: `${process.env.REACT_APP_BASE_URL}/v1/ticket`,
             timeout: 120000,
-            data: reqBody
+            data: { ...reqBody, takeOff: takeOff._d, arrive: arrive._d }
         }).then(() => {
             navigate("/admin/ticket")
             setLoading(false)
@@ -86,18 +93,32 @@ export default function CreateDataTicket() {
                         </div>
                         <Form.Control type="text" name="destinationCode" className="mb-4" value={reqBody.destinationCode} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="-  -  -" maxLength={3} required />
                     </Col>
-                    <Col md="3">
+                    <Col md="3" className="mb-4">
                         <div className="d-flex mb-2">
                             <CalendarMonth />
                             <label className="ms-2">Take Off</label>
                         </div>
-                        <Form.Control type="date" name="takeOff" className="mb-4" value={reqBody.takeOff} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
+                        {/* <Form.Control type="date" name="takeOff" className="mb-4" value={reqBody.takeOff} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required /> */}
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <MobileDateTimePicker
+                                value={takeOff}
+                                onChange={(e) => setTakeOff(e)}
+                                renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
+                            />
+                        </LocalizationProvider>
                     </Col>
-                    <Col md="3">
+                    <Col md="3" className="mb-4">
                         <div className="d-flex mb-2">
                             <label>Arrive</label>
                         </div>
-                        <Form.Control type="date" name="arrive" className="mb-4" value={reqBody.arrive} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
+                        {/* <Form.Control type="date" name="arrive" className="mb-4" value={reqBody.arrive} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required /> */}
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <MobileDateTimePicker
+                                value={arrive}
+                                onChange={(e) => setArrive(e)}
+                                renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
+                            />
+                        </LocalizationProvider>
                     </Col>
                     <Col md="3">
                         <div className="d-flex mb-2">
@@ -133,8 +154,8 @@ export default function CreateDataTicket() {
                     </Col>
                     <Col md="3">
                         <div className="d-flex mb-2">
-                            <i className="bi bi-cash-stack me-2"></i>
-                            <label>Total Seat Available</label>
+                            <AirlineSeatReclineExtra />
+                            <label className="ms-2">Total Seat Available</label>
                         </div>
                         <Form.Control type="text" name="totalChair" className="mb-4" value={reqBody.totalChair} autoComplete="off" placeholder="Total seat . . ." required
                             onChange={(e) => onChangeHandler(e)}

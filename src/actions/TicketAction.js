@@ -37,7 +37,7 @@ export const getFilteredTicket = (param) => {
             .then((response) => {
                 const { departure, destination, takeOff, classFlight, price } = param
                 
-                const filter = response.data.data.tickets.filter((ticket) => ticket.departure === departure && ticket.destination === destination && ticket.class === classFlight && ticket.price >= price && (new Date(ticket.takeOff) <= takeOff))
+                const filter = response.data.data.tickets.filter((ticket) => ticket.departure === departure && ticket.destination === destination && ticket.class === classFlight && ticket.price >= price && (new Date(ticket.takeOff) >= takeOff))
                 
                 dispatch({
                     type: FILTERED_TICKET,

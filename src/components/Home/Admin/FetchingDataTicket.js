@@ -10,7 +10,7 @@ import DetailTicket from "../../Modal/DetailTicket";
 export default function FetchingDataTicket(props) {
     const [tickets, setTickets] = useState([]);
     const [modalShow, setModalShow] = useState(false);
-    const [dataTicket, setDataTicket] = useState({});
+    const [dataTicket, setDataTicket] = useState(null);
 
     useEffect(() => {
         axios({
@@ -96,7 +96,7 @@ export default function FetchingDataTicket(props) {
                                         </Row>
                                         <p>{moment(ticket.takeOff).format('ll')}</p>
                                     </Card.Body>
-                                    <div className="flap" datacode={ticket.code} dataindex={index+1}></div>
+                                    <div className="flap" datacode={ticket.code} dataindex={index + 1}></div>
                                     <Card.Footer onClick={() => onHandleDetail(ticket.id)}>
                                         <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
                                     </Card.Footer>
@@ -107,11 +107,13 @@ export default function FetchingDataTicket(props) {
                     })}
                 </Carousel>
             ) : <CardSkeleton md="4" />}
-            <DetailTicket
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                detail={dataTicket}
-            />
+            {dataTicket ? (
+                <DetailTicket
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    detail={dataTicket}
+                />
+            ) : ""}
         </Row>
     );
 }

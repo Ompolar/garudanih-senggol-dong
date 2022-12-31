@@ -80,7 +80,7 @@ export default function ProfileIndex() {
                                 {dataTransaction ? (
                                     <>
                                         <ProgressBar now={dataTransaction.success} max={dataTransaction.total} className="my-3 rounded-0" />
-                                        <span className="fw-bold">{dataTransaction.success} of {dataTransaction.total} success<span className="ms-2 fw-normal text-muted">({(dataTransaction.success/dataTransaction.total)*100}% of total transaction successfully)</span></span>
+                                        <span className="fw-bold">{dataTransaction.success} of {dataTransaction.total} success<span className="ms-2 fw-normal text-muted">({Math.floor((dataTransaction.success/dataTransaction.total)*100)}% of total transaction successfully)</span></span>
                                     </>
                                 ) : ""}
                             </div>

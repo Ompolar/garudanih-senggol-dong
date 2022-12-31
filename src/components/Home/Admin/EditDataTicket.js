@@ -16,17 +16,21 @@ import {
     FlightTakeoff,
     AirlineSeatReclineNormal
 } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { OutlinedInput } from "@mui/material";
 
 export default function EditDataTicket() {
     const [loading, setLoading] = useState(false)
     const [modalShow, setModalShow] = useState(false)
+    const [takeOff, setTakeOff] = useState(moment())
+    const [arrive, setArrive] = useState(moment())
     const [reqBody, setReqBody] = useState({
         departure: "",
         departureCode: "",
         destination: "",
         destinationCode: "",
-        takeOff: "",
-        arrive: "",
         type: "",
         class: "",
         price: 0,
@@ -45,23 +49,24 @@ export default function EditDataTicket() {
             timeout: 120000
         }).then((res) => {
             const result = res.data.data
-
+            
             setReqBody({
-                departure: result.departure,
-                departureCode: result.departureCode,
-                destination: result.destination,
-                destinationCode: result.destinationCode,
-                takeOff: result.takeOff,
-                arrive: result.arrive,
-                type: result.type,
-                class: result.class,
-                price: result.price,
-                totalChair: result.totalChair,
-                flight: result.flight
+                departure: result.ticket.departure,
+                departureCode: result.ticket.departureCode,
+                destination: result.ticket.destination,
+                destinationCode: result.ticket.destinationCode,
+                type: result.ticket.type,
+                class: result.ticket.class,
+                price: result.ticket.price,
+                totalChair: result.ticket.totalChair,
+                flight: result.ticket.flight
             })
+
+            setTakeOff(moment(result.ticket.takeOff))
+            setArrive(moment(result.ticket.arrive))
             
         }).catch((err) => {
-            console.log(err)
+            console.log(err.message)
         })
     }, [id])
 
@@ -81,7 +86,7 @@ export default function EditDataTicket() {
             method: 'PUT',
             url: `${process.env.REACT_APP_BASE_URL}/v1/ticket/${id}`,
             timeout: 120000,
-            data: reqBody
+            data: { ...reqBody, takeOff: takeOff._d, arrive: arrive._d }
         }).then(() => {
             navigate("/admin/ticket")
             setLoading(false)
@@ -103,39 +108,53 @@ export default function EditDataTicket() {
                             <FlightTakeoff />
                             <label className="ms-2">Departure</label>
                         </div>
-                        <Form.Control type="text" name="departure" className="mb-4" value={reqBody.departure} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
+                        <Form.Control type="text" name="departure" className="mb-4" value={reqBody.departure || ""} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
                     </Col>
                     <Col md="1">
                         <div className="d-flex mb-2">
                             <label>ICAO</label>
                         </div>
-                        <Form.Control type="text" name="departureCode" className="mb-4" value={reqBody.departureCode} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="-  -  -" maxLength={3} required />
+                        <Form.Control type="text" name="departureCode" className="mb-4" value={reqBody.departureCode || ""} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="-  -  -" maxLength={3} required />
                     </Col>
                     <Col md="5">
                         <div className="d-flex mb-2">
                             <FlightLand />
                             <label className="ms-2">Destination</label>
                         </div>
-                        <Form.Control type="text" name="destination" className="mb-4" value={reqBody.destination} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
+                        <Form.Control type="text" name="destination" className="mb-4" value={reqBody.destination || ""} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required />
                     </Col>
                     <Col md="1">
                         <div className="d-flex mb-2">
                             <label>ICAO</label>
                         </div>
-                        <Form.Control type="text" name="destinationCode" className="mb-4" value={reqBody.destinationCode} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="-  -  -" maxLength={3} required />
+                        <Form.Control type="text" name="destinationCode" className="mb-4" value={reqBody.destinationCode || ""} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="-  -  -" maxLength={3} required />
                     </Col>
-                    <Col md="3">
+                    <Col md="3" className="mb-4">
                         <div className="d-flex mb-2">
                             <CalendarMonth />
                             <label className="ms-2">Take Off</label>
                         </div>
-                        <Form.Control type="date" name="takeOff" className="mb-4" value={moment(reqBody.takeOff).format("YYYY-MM-DD")} onChange={(e) => onChangeHandler(e)} required />
+                        {/* <Form.Control type="date" name="takeOff" className="mb-4" value={moment(reqBody.takeOff).format("YYYY-MM-DD") || ""} onChange={(e) => onChangeHandler(e)} required /> */}
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <MobileDateTimePicker
+                                value={takeOff}
+                                onChange={(e) => setTakeOff(e)}
+                                renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
+                            />
+                        </LocalizationProvider>
                     </Col>
-                    <Col md="3">
+                    <Col md="3" className="mb-4">
                         <div className="d-flex mb-2">
                             <label>Arrive</label>
                         </div>
-                        <Form.Control type="date" name="arrive" className="mb-4" value={moment(reqBody.arrive).format("YYYY-MM-DD")} onChange={(e) => onChangeHandler(e)} required />
+                        {/* <Form.Control type="date" name="arrive" className="mb-4" value={moment(reqBody.arrive).format("YYYY-MM-DD") || ""} onChange={(e) => onChangeHandler(e)} required /> */}
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <MobileDateTimePicker
+                                value={arrive}
+                                onChange={(e) => setArrive(e)}
+                                renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
+                            />
+                        </LocalizationProvider>
                     </Col>
                     <Col md="3">
                         <div className="d-flex mb-2">

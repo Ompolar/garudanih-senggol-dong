@@ -4,11 +4,15 @@ import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
 import moment from "moment";
 import { AirlineSeatReclineExtra, AssignmentInd, Pin } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, Fragment } from "react";
 import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip, ToggleButton } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import LoadingCircle from '../../Loader/LoadingCircle';
+import LoadingSquare from '../../Loader/LoadingSquare';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import MuiAlert from '@mui/material/Alert';
 
 export default function DetailTicket() {
     const { id } = useParams()
@@ -16,17 +20,18 @@ export default function DetailTicket() {
     const navigate = useNavigate()
 
     const [data, setData] = useState(null)
-    const [numberOptions, setNumberOptions] = useState([])
     const [returnNumber, setReturnNumber] = useState([])
+    const [radios, setRadios] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState(null)
     const [requestBody, setRequestBody] = useState({
         ktp: "",
         orderBy: "",
-        numChair: '0',
+        numChair: 0,
         returnTicketId: null,
         returnTicketChair: 0,
     })
 
-    const [radios, setRadios] = useState([]);
 
     useEffect(() => {
         axios({
@@ -43,14 +48,6 @@ export default function DetailTicket() {
 
     useEffect(() => {
         if (data) {
-            let arr = []
-            for (let i = 0; i < data.ticket.totalChair; i++) {
-                const found = data.ticket.bookingBy.some(el => el.numChair === i);
-
-                if (!found) arr.push({ value: `${i}`, label: `${i}` });
-            }
-            setNumberOptions(arr)
-
             let array = []
 
             for (let index = 0; index < data.ticket.totalChair; index++) {
@@ -59,7 +56,7 @@ export default function DetailTicket() {
 
             setRadios(array)
         }
-        
+
     }, [data])
 
     useEffect(() => {
@@ -86,8 +83,6 @@ export default function DetailTicket() {
     const onSubmitHandler = (e) => {
         e.preventDefault()
 
-        console.log(requestBody)
-
         const token = localStorage.getItem("token")
 
         axios({
@@ -99,12 +94,14 @@ export default function DetailTicket() {
                 "Authorization": `Bearer ${token}`
             }
         }).then((res) => {
-            console.log(res.data)
+            setOpen(true)
 
-            navigate("/")
+            setMessage({ info: res.data.data.desc, success: true })
 
         }).catch((err) => {
-            console.log(err.message)
+            setOpen(true)
+
+            setMessage({ info: err.response.data.message, success: false })
         })
     };
 
@@ -126,11 +123,49 @@ export default function DetailTicket() {
         }
     };
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+        navigate("/transaction")
+    };
+
+    const Alert = forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    const action = (
+        <Fragment>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </Fragment>
+    );
+
     return (
         <Container>
+            {open ? (
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    action={action}
+                >
+                    <Alert onClose={handleClose} severity={message.success ? "success" : "error"} sx={{ width: '100%' }}>
+                        {message.info}
+                    </Alert>
+                </Snackbar>
+            ) : ""}
             {data ? (
                 <Row>
-                    <Col md="8">
+                    <Col md="8" className="mb-4">
                         <Card>
                             <Card.Body>
                                 <div className="d-flex justify-content-between">
@@ -192,7 +227,7 @@ export default function DetailTicket() {
                                                         <Tooltip id="tooltip-top">Has been ordered</Tooltip>
                                                     }
                                                 >
-                                                    <div className="seat--list bg-success text-white cursor-pointer">
+                                                    <div className="seat--list--book bg-success text-white cursor-pointer">
                                                         <p className="my-auto">{i}</p>
                                                     </div>
                                                 </OverlayTrigger>
@@ -205,14 +240,11 @@ export default function DetailTicket() {
                                                     className="seat--list"
                                                     name="radio"
                                                     value={radio.value}
-                                                    checked={requestBody.numChair === radio.value}
-                                                    onChange={(e) => setRequestBody({...requestBody, numChair: e.currentTarget.value})}
+                                                    checked={requestBody.numChair.toString() === radio.value}
+                                                    onChange={(e) => setRequestBody({ ...requestBody, numChair: parseInt(e.currentTarget.value) })}
                                                 >
                                                     {radio.name}
                                                 </ToggleButton>
-                                                // <div key={i} className="seat--list">
-                                                //     <p className="my-auto">{i}</p>
-                                                // </div>
                                             )
                                         )
                                     })}
@@ -220,36 +252,30 @@ export default function DetailTicket() {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md="4">
+                    <Col md="4" className="mb-4">
                         <Card>
                             <Card.Body>
-                                <p className="fs-5 mb-3 fw-bold">Pesan Sekarang</p>
+                                <p className="fs-5 mb-3 fw-bold">Booking Now</p>
                                 <div className="mb-4">
                                     <div className="d-flex mb-2">
                                         <Pin />
                                         <label className="ms-2">Identify Number</label>
                                     </div>
-                                    <Form.Control type="text" name="ktp" value={requestBody.ktp} onChange={(e) => onChangeHandler(e)} placeholder="Nomor KTP . . ." />
+                                    <Form.Control type="text" name="ktp" value={requestBody.ktp} onChange={(e) => onChangeHandler(e)} placeholder="KTP / VISA / Passport . . ." />
                                 </div>
                                 <div className="mb-4">
                                     <div className="d-flex mb-2">
                                         <AssignmentInd />
                                         <label className="ms-2">Booking As</label>
                                     </div>
-                                    <Form.Control type="text" name="orderBy" value={requestBody.orderBy} onChange={(e) => onChangeHandler(e)} placeholder="Masukan nama . . ." />
+                                    <Form.Control type="text" name="orderBy" value={requestBody.orderBy} onChange={(e) => onChangeHandler(e)} placeholder="Enter your name . . ." />
                                 </div>
                                 <div className="mb-4">
                                     <div className="d-flex mb-2">
                                         <AirlineSeatReclineExtra />
                                         <label className="ms-2">Seat Number</label>
                                     </div>
-                                    {numberOptions.length !== 0 ? (
-                                        <Select
-                                            options={numberOptions}
-                                            onChange={(e) => setRequestBody({ ...requestBody, numChair: e.value })}
-                                            placeholder="Select an available seat . . ."
-                                        />
-                                    ) : ""}
+                                    <p className="bg-secondary text-white text-center rounded py-1">{requestBody.numChair}</p>
                                 </div>
 
                                 {returnNumber.length !== 0 ? (
@@ -266,13 +292,13 @@ export default function DetailTicket() {
                                     </div>
                                 ) : ""}
 
-                                <button className="btn--shop" onClick={(e) => onSubmitHandler(e)}>Pesan Sekarang</button>
+                                <button className="btn--shop" onClick={(e) => onSubmitHandler(e)}>Continue Transaction</button>
                             </Card.Body>
                         </Card>
                     </Col>
 
 
-                    {data.returnTicket.length !== 0 ? <p className="fs-5 mt-3 fw-bold">Pesan juga tiket pulang</p> : <p className="fs-5 mt-3 fw-bold text-danger">Saat ini tiket pulang tidak tersedia</p>}
+                    {data.returnTicket.length !== 0 ? <p className="fs-5 mb-4 fw-bold">Booking for return ticket also</p> : <p className="fs-5 mt-3 fw-bold text-danger">Saat ini tiket pulang tidak tersedia</p>}
                     <Carousel
                         swipeable={true}
                         draggable={false}
@@ -322,7 +348,7 @@ export default function DetailTicket() {
 
 
                 </Row>
-            ) : (<LoadingCircle styled="d-flex justify-content-center" />)
+            ) : (<LoadingSquare />)
             }
         </Container >
     );

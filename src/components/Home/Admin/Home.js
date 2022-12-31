@@ -17,7 +17,6 @@ export default function HomeAdmin() {
                         {isOpen ? <i className="bi bi-x-lg"></i> : <i className="bi bi-list"></i>}
                     </div>
                     <div className="d-flex">
-                        <i className="bi bi-bell-fill fs-3 my-auto mx-4 position-relative"><span className="position-absolute translate-middle badge rounded-pill bg-danger" style={{ fontSize: "9px", top: 16, left: 25 }}>+99</span></i>
                         <NavBar />
                     </div>
                 </div>

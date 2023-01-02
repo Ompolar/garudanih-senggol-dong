@@ -467,3 +467,18 @@
 .nav--profile a:not(.active):hover {
     border-bottom: 2px solid #FF4E4E;
 }
+
+/* ============= styling profile wishlist ============= */
+
+.user--wish--item {
+    padding: 1em;
+    border: 1px solid transparent;
+    transition: all .3s ease-out;
+}
+
+.user--wish--item:hover {
+    background: #F3F7FD;
+    border: 1px solid #2F82FF;
+    border-radius: 7px;
+    box-shadow: 1px 3px 12px -3px #2F82FF;
+}

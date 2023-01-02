@@ -14,12 +14,14 @@ import { OutlinedInput } from "@mui/material";
 export default function FormFilter() {
     const [airportOptions, setAirportOptions] = useState([])
     const [date, setDate] = useState(moment())
+    const [returnDate, setReturnDate] = useState(moment())
     const [requestBody, setRequestBody] = useState({
         departure: "",
         destination: "",
         classFlight: "",
         price: 0,
         takeOff: "",
+        category: "oneway",
     })
 
     const dispatch = useDispatch()
@@ -51,7 +53,12 @@ export default function FormFilter() {
     const handleFilter = (e) => {
         e.preventDefault()
 
-        dispatch(getFilteredTicket({ ...requestBody, takeOff: date._d }))
+        if (requestBody.category === "oneway") {
+            dispatch(getFilteredTicket({ ...requestBody, takeOff: date._d }))
+        } else {
+            dispatch(getFilteredTicket({ ...requestBody, takeOff: date._d, returnDate: returnDate._d }))
+        }
+
     }
 
     const handleReset = () => {
@@ -61,9 +68,11 @@ export default function FormFilter() {
             classFlight: "",
             price: 0,
             takeOff: "",
+            category: "oneway",
         })
 
         setDate(null)
+        setReturnDate(null)
 
         dispatch(getFilteredTicket({ reset: true }))
     }
@@ -93,21 +102,59 @@ export default function FormFilter() {
                         placeholder="Airport or city . . ."
                     />
                 </Col>
-                <Col md="3" className="mb-4">
+                <Col sm="6" md="3" className="mb-4">
+                    <div className="d-flex mb-3">
+                        <CalendarMonth />
+                        <label className="ms-2">Category</label>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                        <Form.Check
+                            checked={requestBody.category === "oneway"}
+                            type="radio"
+                            name="category"
+                            value="oneway"
+                            label="One Way"
+                            onChange={(e) => onChangeHandler(e)}
+                        />
+                        <Form.Check
+                            checked={requestBody.category === "roundtrip"}
+                            type="radio"
+                            name="category"
+                            value="roundtrip"
+                            label="Round Trip"
+                            onChange={(e) => onChangeHandler(e)}
+                        />
+                    </div>
+                </Col>
+                <Col sm="6" md="3" className="mb-4">
                     <div className="d-flex mb-2">
                         <CalendarMonth />
                         <label className="ms-2">Take Off</label>
                     </div>
-                    {/* <Form.Control type="date" name="takeOff" value={requestBody.takeOff} onChange={(e) => onChangeHandler(e)} autoComplete="off" placeholder="Airport name . . ." required /> */}
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <MobileDateTimePicker
                             value={date}
                             onChange={(e) => setDate(e)}
-                            renderInput={(params) => <OutlinedInput sx={{ height: "40px" }} {...params} />}
+                            renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
                         />
                     </LocalizationProvider>
                 </Col>
-                <Col md="3" className="mb-4">
+                {requestBody.category === "roundtrip" ? (
+                    <Col sm="6" md="3" className="mb-4">
+                        <div className="d-flex mb-2">
+                            <CalendarMonth />
+                            <label className="ms-2">Return Date</label>
+                        </div>
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <MobileDateTimePicker
+                                value={returnDate}
+                                onChange={(e) => setReturnDate(e)}
+                                renderInput={(params) => <OutlinedInput sx={{ height: "40px", width: "100%" }} {...params} />}
+                            />
+                        </LocalizationProvider>
+                    </Col>
+                ) : ""}
+                <Col sm="6" md="3" className="mb-4">
                     <div className="d-flex mb-2">
                         <FlightClass />
                         <label className="ms-2">Class</label>
@@ -119,7 +166,7 @@ export default function FormFilter() {
                         <option value="Economy">Economy</option>
                     </select>
                 </Col>
-                <Col md="3" className="mb-4">
+                <Col sm="6" md="3" className="mb-4">
                     <div className="d-flex mb-2">
                         <i className="bi bi-cash-stack me-2"></i>
                         <label>Price (optional)</label>
@@ -128,9 +175,9 @@ export default function FormFilter() {
                         onChange={(e) => onChangeHandler(e)}
                         onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()} />
                 </Col>
-                <Col md="3">
-                    <button type="submit" className="btn btn-primary w-100">Search flights</button>
-                    <button type="reset" onClick={() => handleReset()} className=" btn btn-outline-danger w-100 mt-3">Clear</button>
+                <Col className="d-flex mt-auto mb-4" style={{ height: "40px" }}>
+                    <button type="submit" className="btn btn-primary w-100 me-2">Search</button>
+                    <button type="reset" onClick={() => handleReset()} className=" btn btn-outline-danger w-100 ms-2">Clear</button>
                 </Col>
             </Row>
         </Form>

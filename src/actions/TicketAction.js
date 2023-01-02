@@ -8,6 +8,8 @@ export const getFilteredTicket = (param) => {
     
     if (reset) {
         return (dispatch) => {
+            localStorage.removeItem("category")
+            
             dispatch({
                 type: FILTERED_TICKET,
                 payload: {
@@ -39,6 +41,13 @@ export const getFilteredTicket = (param) => {
                 
                 const filter = response.data.data.tickets.filter((ticket) => ticket.departure === departure && ticket.destination === destination && ticket.class === classFlight && ticket.price >= price && (new Date(ticket.takeOff) >= takeOff))
                 
+                if(param.category === "roundtrip"){
+                    localStorage.setItem("category", {
+                        desc: param.category,
+                        date: param.returnDate
+                    })
+                }
+
                 dispatch({
                     type: FILTERED_TICKET,
                     payload: {

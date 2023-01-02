@@ -64,6 +64,12 @@ export default function HistoryTransaction() {
             valueGetter: (params) => moment(params.row.createdAt).format('LLL')
         },
         {
+            field: 'takeOff',
+            headerName: 'Take off Schadule',
+            width: 210,
+            valueGetter: (params) => moment(params.row.date).format('LLL')
+        },
+        {
             field: "Action",
             width: 270,
             renderCell: (cellValues) => {

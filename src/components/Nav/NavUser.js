@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionUserLogout } from '../../actions/UserAction';
 import LoadingSpinner from '../LoadingSpinner';
 import React, { useEffect, useState } from "react"
-import { AirplanemodeActive, NotificationsNone } from '@mui/icons-material';
+import { AirplanemodeActive, Bookmarks, NotificationsNone } from '@mui/icons-material';
 
 export default function NavUser() {
     const [notification, setNotification] = useState([]);
     const [socket, setSocket] = useState(null);
     const [count, setCount] = useState(0)
+    const [wishlist, setWishlist] = useState([])
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -66,6 +67,30 @@ export default function NavUser() {
     //     });
     // }, [socket, notification])
 
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        
+        const interval = setInterval(() => {
+            axios({
+                method: 'GET',
+                url: `${process.env.REACT_APP_BASE_URL}/v1/user/wishlist`,
+                timeout: 120000,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }).then((res) => {
+                setWishlist(res.data.data.wishlist)
+            }).catch((err) => {
+                console.log(err.response.data.errors)
+            })
+        }, 5000)
+
+        return () => {
+            clearInterval(interval)
+        }
+
+    }, [])
+
     const onReadHandler = (id) => {
         axios({
             method: 'PUT',
@@ -85,7 +110,37 @@ export default function NavUser() {
                         <p>GarudaNih</p>
                     </Link>
                     <div className="d-flex justify-content-end">
-                        <Dropdown className="my-auto me-2" align="end">
+                        <Dropdown className="my-auto me-3" align="end">
+                            <Dropdown.Toggle as={CustomToggle} id="dropdown-basic">
+                                {currentUserData ? (
+                                    <button className="btn--notification">
+                                        <span className="position-absolute translate-middle badge rounded-pill bg-danger" style={{ fontSize: "9px", top: 8, left: 35 }}>{wishlist.length}</span>
+                                        <Bookmarks />
+                                    </button>
+                                ) : (
+                                    <LoadingSpinner />
+                                )}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="user--notif--dropdown">
+                                {wishlist.length !== 0 ? (
+                                    wishlist.map((item, index) => {
+                                        return (
+                                            <div key={index} className="user--notif--item">
+                                                <div>
+                                                    <p className="user--notif--desc"><span className="fw-bold">From : </span>{item.detailTicket.departureCode} - {item.detailTicket.departure}</p>
+                                                    <p className="user--notif--desc"><span className="fw-bold">To : </span>{item.detailTicket.destinationCode} - {item.detailTicket.destination}</p>
+                                                    <span className="text-muted"><span className="text-black">Take off : </span>{moment(item.detailTicket.takeOff).format('ll')}</span>
+                                                </div>
+                                                <Link to={`ticket/${item.ticketId}`} className="btn btn-outline-dark align-self-center ms-auto">Detail</Link>
+                                            </div>
+                                        )
+                                    })
+                                ) : ""}
+                            </Dropdown.Menu>
+                        </Dropdown>
+
+                        <Dropdown className="my-auto me-3" align="end">
                             <Dropdown.Toggle as={CustomToggle} id="dropdown-basic">
                                 {currentUserData ? (
                                     <button className="btn--notification">

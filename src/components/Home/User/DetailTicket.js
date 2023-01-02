@@ -3,9 +3,9 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
 import moment from "moment";
-import { AirlineSeatReclineExtra, AssignmentInd, Pin } from "@mui/icons-material";
+import { Add, AirlineSeatReclineExtra, AssignmentInd, Pin } from "@mui/icons-material";
 import { useEffect, useState, forwardRef, Fragment } from "react";
-import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip, ToggleButton } from "react-bootstrap";
+import { Card, Col, Container, Row, Form, OverlayTrigger, Tooltip, ToggleButton, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import LoadingSquare from '../../Loader/LoadingSquare';
@@ -13,6 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
+import LoadingSpinner from '../../LoadingSpinner'
 
 export default function DetailTicket() {
     const { id } = useParams()
@@ -23,6 +24,8 @@ export default function DetailTicket() {
     const [returnNumber, setReturnNumber] = useState([])
     const [radios, setRadios] = useState([]);
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [addWishlist, setAddWishlist] = useState(false);
     const [message, setMessage] = useState(null)
     const [requestBody, setRequestBody] = useState({
         ktp: "",
@@ -44,6 +47,25 @@ export default function DetailTicket() {
         }).catch((err) => {
             console.log(err.message)
         })
+
+        const token = localStorage.getItem("token")
+
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/wishlist`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((res) => {
+            const found = res.data.data.wishlist.some(el => el.ticketId.toString() === id);
+
+            if (found) setAddWishlist(true);
+
+        }).catch((err) => {
+            console.log(err.message)
+        })
+
     }, [id])
 
     useEffect(() => {
@@ -104,6 +126,27 @@ export default function DetailTicket() {
             setMessage({ info: err.response.data.message, success: false })
         })
     };
+
+    const onWishlistHandler = () => {
+        setLoading(true)
+
+        const token = localStorage.getItem("token")
+
+        axios({
+            method: 'POST',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/wishlist/${id}`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(() => {
+            setLoading(false)
+            setAddWishlist(true)
+
+        }).catch((err) => {
+            console.log(err.message)
+        })
+    }
 
     const responsive = {
         desktop: {
@@ -170,7 +213,14 @@ export default function DetailTicket() {
                             <Card.Body>
                                 <div className="d-flex justify-content-between">
                                     <p className="fw-bold my-auto">{data.ticket.code}</p>
-                                    <p className="my-auto">{moment(data.ticket.takeOff).format('LL')}</p>
+                                    <div className="d-flex">
+                                        <p className="my-auto me-2">{moment(data.ticket.takeOff).format('LL')}</p>
+                                        {addWishlist ? "" : <Button onClick={() => onWishlistHandler()} variant="outline-primary">{loading ? <LoadingSpinner /> : (
+                                            <>
+                                                <Add className="me-2" />Add Wishlist
+                                            </>
+                                        )}</Button>}
+                                    </div>
                                 </div>
                                 <Row className="my-4">
                                     <Col md="1" className="text-end"><i className=" bi-geo-alt-fill fs-5"></i></Col>
@@ -297,54 +347,57 @@ export default function DetailTicket() {
                         </Card>
                     </Col>
 
-
-                    {data.returnTicket.length !== 0 ? <p className="fs-5 mb-4 fw-bold">Booking for return ticket also</p> : <p className="fs-5 mt-3 fw-bold text-danger">Saat ini tiket pulang tidak tersedia</p>}
-                    <Carousel
-                        swipeable={true}
-                        draggable={false}
-                        responsive={responsive}
-                        ssr={true}
-                        keyBoardControl={true}
-                        customTransition="all 1.5s ease-in-out"
-                        transitionDuration={500}
-                        containerClass="carousel-container"
-                        removeArrowOnDeviceType={["tablet", "mobile"]}
-                        dotListClass="custom-dot-list-style"
-                        showDots={true}
-                    >
-                        {data.returnTicket.map((ticket, index) => {
-                            return (
-                                <div key={index} className="d-flex align-items-stretch me-4">
-                                    <Card className="w-100 mb-4 card-container">
-                                        <Card.Body className="w-100 card-content">
-                                            <input type="radio" value={ticket.id} onChange={(e) => onChangeHandler(e)} name="returnTicketId" />
-                                            <p style={{ color: "#2F82FF" }}>{moment(ticket.takeOff).format('LL')}</p>
-                                            <Row>
-                                                <Col md="5">
-                                                    <p className="text-muted mb-0">From</p>
-                                                    <p className="fw-bold m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
-                                                    <p style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
-                                                    <p>{moment(ticket.takeOff).format('LT')}</p>
-                                                </Col>
-                                                <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
-                                                    <i className="bi bi-airplane fs-5"></i>
-                                                </Col>
-                                                <Col md="5">
-                                                    <p className="text-muted mb-0">To</p>
-                                                    <p className="fw-bold m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
-                                                    <p style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
-                                                    <p>{moment(ticket.arrive).format('LT')}</p>
-                                                </Col>
-                                            </Row>
-                                        </Card.Body>
-                                        <Card.Footer>
-                                            <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
-                                        </Card.Footer>
-                                    </Card>
-                                </div>
-                            )
-                        })}
-                    </Carousel>
+                    {localStorage.getItem("category") ? (
+                        <>
+                            {data.returnTicket.length !== 0 ? <p className="fs-5 mb-4 fw-bold">Booking for return ticket also</p> : <p className="fs-5 mt-3 fw-bold text-danger">Saat ini tiket pulang tidak tersedia</p>}
+                            <Carousel
+                                swipeable={true}
+                                draggable={false}
+                                responsive={responsive}
+                                ssr={true}
+                                keyBoardControl={true}
+                                customTransition="all 1.5s ease-in-out"
+                                transitionDuration={500}
+                                containerClass="carousel-container"
+                                removeArrowOnDeviceType={["tablet", "mobile"]}
+                                dotListClass="custom-dot-list-style"
+                                showDots={true}
+                            >
+                                {data.returnTicket.map((ticket, index) => {
+                                    return (
+                                        <div key={index} className="d-flex align-items-stretch me-4">
+                                            <Card className="w-100 mb-4 card-container">
+                                                <Card.Body className="w-100 card-content">
+                                                    <input type="radio" value={ticket.id} onChange={(e) => onChangeHandler(e)} name="returnTicketId" />
+                                                    <p style={{ color: "#2F82FF" }}>{moment(ticket.takeOff).format('LL')}</p>
+                                                    <Row>
+                                                        <Col md="5">
+                                                            <p className="text-muted mb-0">From</p>
+                                                            <p className="fw-bold m-0 text-truncate">{ticket.departure.split(",")[1] || ticket.departure}</p>
+                                                            <p style={{ color: "#2F82FF" }}>({ticket.departureCode})</p>
+                                                            <p>{moment(ticket.takeOff).format('LT')}</p>
+                                                        </Col>
+                                                        <Col md="2" className="text-center my-auto" style={{ rotate: "90deg", color: "#2F82FF" }}>
+                                                            <i className="bi bi-airplane fs-5"></i>
+                                                        </Col>
+                                                        <Col md="5">
+                                                            <p className="text-muted mb-0">To</p>
+                                                            <p className="fw-bold m-0 text-truncate">{ticket.destination.split(",")[1] || ticket.destination}</p>
+                                                            <p style={{ color: "#2F82FF" }}>({ticket.destinationCode})</p>
+                                                            <p>{moment(ticket.arrive).format('LT')}</p>
+                                                        </Col>
+                                                    </Row>
+                                                </Card.Body>
+                                                <Card.Footer>
+                                                    <p className="my-auto text-white">Rp{ticket.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+                                                </Card.Footer>
+                                            </Card>
+                                        </div>
+                                    )
+                                })}
+                            </Carousel>
+                        </>
+                    ) : ""}
 
 
                 </Row>

@@ -23,6 +23,7 @@ import UserProfilePage from './pages/UserProfilePage';
 import ProfileIndex from './components/Home/User/ProfileIndex';
 import ProfileEdit from './components/Home/User/ProfileEdit';
 import ProfileNotification from './components/Home/User/ProfileNotification';
+import ProfileWishlist from './components/Home/User/ProfileWishlist';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             <Route index element={<ProfileIndex />} />
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="notification" element={<ProfileNotification />} />
+            <Route path="wishlist" element={<ProfileWishlist />} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />

@@ -42,6 +42,7 @@ export default function ProfileHeading() {
             <div className="nav--profile">
                 <Link to={"/profile"} className={currentPath === "/profile" ? "active" : ""}>About</Link>
                 <Link to={"notification"} className={currentPath === "/profile/notification" ? "active" : ""}>Notification</Link>
+                <Link to={"wishlist"} className={currentPath === "/profile/wishlist" ? "active" : ""}>Wishlist</Link>
             </div>
         </Card>
     );

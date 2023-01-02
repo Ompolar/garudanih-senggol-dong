@@ -38,34 +38,34 @@ export default function NavUser() {
         </div>
     ));
 
-    // useEffect(() => {
-    //     setSocket(io(`${process.env.REACT_APP_BASE_URL}`))
-    // }, [])
+    useEffect(() => {
+        setSocket(io(`${process.env.REACT_APP_BASE_URL}`))
+    }, [])
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token")
+    useEffect(() => {
+        const token = localStorage.getItem("token")
 
-    //     axios({
-    //         method: 'GET',
-    //         url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
-    //         timeout: 120000,
-    //         headers: {
-    //             "Authorization": `Bearer ${token}`
-    //         }
-    //     })
-    //         .then((res) => {
-    //             socket?.emit("lts notify", res.data)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //         })
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                socket?.emit("lts notify", res.data)
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
 
-    //     socket?.on("show notify", body => {
-    //         const filtering = body.data.filter((notify) => !notify.isRead)
-    //         setNotification(filtering)
-    //         setCount(filtering.length)
-    //     });
-    // }, [socket, notification])
+        socket?.on("show notify", body => {
+            const filtering = body.data.filter((notify) => !notify.isRead)
+            setNotification(filtering)
+            setCount(filtering.length)
+        });
+    }, [socket, notification])
 
     useEffect(() => {
         const token = localStorage.getItem("token")

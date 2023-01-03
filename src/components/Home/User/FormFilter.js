@@ -37,7 +37,11 @@ export default function FormFilter() {
             const result = res.data.data.tickets
 
             result.map((ticket) => {
-                return arr.push({ value: ticket.departure, label: ticket.departure })
+                const found = arr.some((el) => el.value === ticket.departure)
+                
+                if(!found) arr.push({ value: ticket.departure, label: ticket.departure })
+
+                return null
             })
 
             setAirportOptions(arr)

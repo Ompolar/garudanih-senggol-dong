@@ -11,11 +11,16 @@ export default function DeleteModal(props) {
 
     const onDeletedHandler = () => {
         setLoading(true)
+
+        const token = localStorage.getItem("token")
         
         axios({
             method: 'DELETE',
-            url: `https://api-ticket.up.railway.app/v1/${props.target}/${props.dataid}`,
-            timeout: 120000
+            url: `${process.env.REACT_APP_BASE_URL}/v1/${props.target}/${props.dataid}`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         }).then(() => {
             navigate("/")
             setLoading(false)

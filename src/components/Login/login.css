@@ -34,6 +34,19 @@
     margin-left: 9px;
 }
 
+.login--right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #2F82FF;
+}
+
+.register--left {
+    background: #2F82FF;
+    padding: 0;
+    margin: 0;
+}
+
 .register-icon {
     display: flex;
     position: fixed;
@@ -96,4 +109,18 @@
 
 .btn.btn--primary:hover:before {
     width: 100%;
+}
+
+@media (max-width: 990px) {
+    .login--right {
+        display: none;
+    }
+
+    .register--left {
+        display: none;
+    }
+
+    .register-icon p, .register-icon i {
+        color: #2F82FF !important;
+    }
 }

@@ -148,7 +148,7 @@ export default function ProfileNotification() {
                                                 <div key={index}>
                                                     <Card.Body>
                                                         <span>{item.desc}</span>
-                                                        <p className="my-0 text-muted">{moment(item.updatedAt).startOf('hour').fromNow()}</p>
+                                                        <p className="my-0 text-muted">{moment(item.updatedAt).fromNow()}</p>
                                                     </Card.Body>
                                                     {index !== read.length - 1 ? (
                                                         <hr className="my-0" />

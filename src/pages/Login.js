@@ -13,7 +13,7 @@ export default function Login() {
                     </div>
                     <LoginInput />
                 </Col>
-                <Col md="5" style={{ background: "#2F82FF" }} className="d-flex flex-column justify-content-between">
+                <Col md="5" className="login--right">
                     <img src={bgLogin} alt="bg-login" className="w-50 m-5" />
                     <div className="login-title">
                         <h1 className="fw-bold px-5 text-white">Hi, Welcome to GarudaNih</h1>

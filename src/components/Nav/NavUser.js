@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionUserLogout } from '../../actions/UserAction';
 import LoadingSpinner from '../LoadingSpinner';
 import React, { useEffect, useState } from "react"
-import { AirplanemodeActive, Bookmarks, NotificationsNone } from '@mui/icons-material';
+import { AirplanemodeActive, Bookmarks, ExitToApp, NotificationsNone, PersonOutlined } from '@mui/icons-material';
 
 export default function NavUser() {
     const [notification, setNotification] = useState([]);
@@ -168,7 +168,7 @@ export default function NavUser() {
                                                 <div key={index} className="d-flex px-2 bg-secondary">
                                                     <div style={{ width: "200px" }}>
                                                         <p className="mb-0" style={{ fontSize: "12px" }}>{item.desc}</p>
-                                                        <p className="text-white">{moment(item.createdAt).startOf('hour').fromNow()}</p>
+                                                        <p className="text-white">{moment(item.createdAt).fromNow()}</p>
                                                     </div>
                                                 </div>
                                                 <Dropdown.Divider />
@@ -214,9 +214,9 @@ export default function NavUser() {
                                             </div>
                                         }
                                     >
-                                        <Link to={"/profile"} className="text-decoration-none px-3 py-5 text-black">Profile</Link>
+                                        <Link to={"/profile"} className="text-decoration-none px-3 py-5 text-black"><PersonOutlined className="me-3" />Profile</Link>
                                         <NavDropdown.Divider />
-                                        <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                                        <NavDropdown.Item onClick={handleLogout}><ExitToApp className="me-3" />Logout</NavDropdown.Item>
                                     </NavDropdown>
                                 </Nav>
                             </Offcanvas.Body>

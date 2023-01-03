@@ -63,7 +63,7 @@ export default function FetchingDataTransc() {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 dataid={id}
-                target="transc"
+                target="trans"
             />
         </div>
     );

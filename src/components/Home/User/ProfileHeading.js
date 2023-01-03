@@ -29,7 +29,7 @@ export default function ProfileHeading() {
                     <Col sm="6" md="4" className="d-flex align-items-center text-muted">
                         <AccessTime />
                         <p className="mx-2 my-0">Last Updated :</p>
-                        <p className="my-0 text-black">{moment(currentUserData.updatedAt).startOf('hour').fromNow()}</p>
+                        <p className="my-0 text-black">{moment(currentUserData.updatedAt).fromNow()}</p>
                     </Col>
                     <Col sm="6" md="4" className="d-flex justify-content-end align-items-center">
                         <Link to={"edit"} className="bg-black text-decoration-none text-white px-3 py-2 rounded">

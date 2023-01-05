@@ -56,6 +56,7 @@ export default function NavUser() {
             })
                 .then((res) => {
                     const filtering = res.data.data.filter((notify) => !notify.isRead)
+                    console.log(res.data.data)
                     setNotification(filtering)
                     setCount(filtering.length)
                 })

@@ -45,40 +45,44 @@ export default function NavUser() {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        const interval = setInterval(() => {
-            axios({
-                method: 'GET',
-                url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
-                timeout: 120000,
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
+            timeout: 120000,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                socket?.emit("lts notify", res.data)
             })
-                .then((res) => {
-                    const filtering = res.data.data.tickets.filter((notify) => !notify.isRead)
-                    // socket?.emit("lts notify", res.data)
+            .catch((err) => {
+                console.log(err.message)
+            })
+
+
+            const interval = setInterval(() => {
+                socket?.on("show notify", body => {
+                    const filtering = body.data.filter((notify) => !notify.isRead)
                     setNotification(filtering)
                     setCount(filtering.length)
-                })
-                .catch((err) => {
-                    console.log(err.message)
-                })
-        }, 5000)
-
-        return () => {
-            clearInterval(interval)
-        }
-
+                });
+            }, 5000)
+    
+            return () => {
+                clearInterval(interval)
+            }
+            
         // socket?.on("show notify", body => {
         //     const filtering = body.data.filter((notify) => !notify.isRead)
         //     setNotification(filtering)
         //     setCount(filtering.length)
         // });
-    }, [])
+    }, [socket, notification])
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-
+        
         const interval = setInterval(() => {
             axios({
                 method: 'GET',

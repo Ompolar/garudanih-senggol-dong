@@ -65,6 +65,10 @@ export default function NavUser() {
                 })
         }, 5000)
 
+        return () => {
+            clearInterval(interval)
+        }
+
         // socket?.on("show notify", body => {
         //     const filtering = body.data.filter((notify) => !notify.isRead)
         //     setNotification(filtering)

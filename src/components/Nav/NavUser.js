@@ -45,20 +45,22 @@ export default function NavUser() {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        axios({
-            method: 'GET',
-            url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
-            timeout: 120000,
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then((res) => {
-                socket?.emit("lts notify", res.data)
+        const interval = setInterval(() => {
+            axios({
+                method: 'GET',
+                url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
+                timeout: 120000,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             })
-            .catch((err) => {
-                console.log(err.message)
-            })
+                .then((res) => {
+                    socket?.emit("lts notify", res.data)
+                })
+                .catch((err) => {
+                    console.log(err.message)
+                })
+        }, 5000)
 
         socket?.on("show notify", body => {
             const filtering = body.data.filter((notify) => !notify.isRead)
@@ -69,7 +71,7 @@ export default function NavUser() {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-        
+
         const interval = setInterval(() => {
             axios({
                 method: 'GET',

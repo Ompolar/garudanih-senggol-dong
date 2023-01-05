@@ -65,7 +65,7 @@ export default function NavUser() {
             setNotification(filtering)
             setCount(filtering.length)
         });
-    }, [socket, notification])
+    }, [socket])
 
     useEffect(() => {
         const token = localStorage.getItem("token")

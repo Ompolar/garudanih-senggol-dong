@@ -45,29 +45,48 @@ export default function NavUser() {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        axios({
-            method: 'GET',
-            url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
-            timeout: 120000,
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then((res) => {
-                socket?.emit("lts notify", res.data)
+        const interval = setInterval(() => {
+            axios({
+                method: 'GET',
+                url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
+                timeout: 120000,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             })
-            .catch((err) => {
-                console.log(err.message)
-            })
-
-
-            const interval = setInterval(() => {
-                socket?.on("show notify", body => {
-                    const filtering = body.data.filter((notify) => !notify.isRead)
+                .then((res) => {
+                    const filtering = res.data.data.filter((notify) => !notify.isRead)
                     setNotification(filtering)
                     setCount(filtering.length)
-                });
-            }, 5000)
+                })
+                .catch((err) => {
+                    console.log(err.message)
+                })
+        }, 5000)
+
+        // axios({
+        //     method: 'GET',
+        //     url: `${process.env.REACT_APP_BASE_URL}/v1/user/notify`,
+        //     timeout: 120000,
+        //     headers: {
+        //         "Authorization": `Bearer ${token}`
+        //     }
+        // })
+        //     .then((res) => {
+        //         socket?.emit("lts notify", res.data)
+        //     })
+        //     .catch((err) => {
+        //         console.log(err.message)
+        //     })
+
+
+        //     const interval = setInterval(() => {
+        //         socket?.on("show notify", body => {
+        //             const filtering = body.data.filter((notify) => !notify.isRead)
+        //             setNotification(filtering)
+        //             setCount(filtering.length)
+        //         });
+        //     }, 5000)
     
             return () => {
                 clearInterval(interval)
@@ -78,7 +97,7 @@ export default function NavUser() {
         //     setNotification(filtering)
         //     setCount(filtering.length)
         // });
-    }, [socket, notification])
+    }, [socket])
 
     useEffect(() => {
         const token = localStorage.getItem("token")

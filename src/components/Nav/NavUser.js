@@ -55,19 +55,22 @@ export default function NavUser() {
                 }
             })
                 .then((res) => {
-                    socket?.emit("lts notify", res.data)
+                    const filtering = res.data.data.tickets.filter((notify) => !notify.isRead)
+                    // socket?.emit("lts notify", res.data)
+                    setNotification(filtering)
+                    setCount(filtering.length)
                 })
                 .catch((err) => {
                     console.log(err.message)
                 })
         }, 5000)
 
-        socket?.on("show notify", body => {
-            const filtering = body.data.filter((notify) => !notify.isRead)
-            setNotification(filtering)
-            setCount(filtering.length)
-        });
-    }, [socket])
+        // socket?.on("show notify", body => {
+        //     const filtering = body.data.filter((notify) => !notify.isRead)
+        //     setNotification(filtering)
+        //     setCount(filtering.length)
+        // });
+    }, [])
 
     useEffect(() => {
         const token = localStorage.getItem("token")
